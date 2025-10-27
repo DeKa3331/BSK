@@ -1,0 +1,2 @@
+# BSK
+notatki do labow
