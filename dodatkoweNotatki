@@ -1,0 +1,83 @@
+odpalanie 
+docker run -p 5000:5000 --name curljq docker.io/mazurkatarzyna/curl-jq-server:latest
+
+jak jest utworzony to
+podman rm ID -wstaw to co wyskakuje w konsoli
+
+aby sie polaczyc to
+127.0.0.1/docs -ip z konsoli
+
+pobieranie konkretnej wartosci:
+curl -X 'GET' 'http://localhost:5000/user/alice' -H 'accept: */*' | jq {name}
+
+jak chcemy true/false sprawdzenie:
+| jq '{hobbies:(.hobbies | index("games"))} !=null'
+
+konkretny indeks
+| jq '.hobbies[0]'
+
+pusty obiekt json do echo
+curl -X 'POST' \ 'http://localhost:5000/echo' \ -H 'accept: */*' \ -H 'Content-Type: application/json' \ -d '{}'
+
+przykladowy inny:
+curl -X 'POST' \
+'http://localhost:5000/echo' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{"test":"hello"}'
+
+z wieloma wartosciami;
+curl -X 'POST' \
+'http://localhost:5000/items' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{<br /> "name": "cos",<br /> "price": 1000<br /> }'
+
+update ceny:
+curl -X 'PUT' \
+'http://localhost:5000/items/1' \
+-H 'accept: */*' \
+-H 'Content-Type: application/json' \
+-d '{"price":"20"}'
+
+usuniecie:
+curl -X 'DELETE' \
+'http://localhost:5000/items/3' \
+-H 'accept: */*'
+
+
+
+
+rozwiazania kacper:
+
+1. curl -s http://127.0.0.1:5000/user/alice | jq -r .
+2. curl -s http://127.0.0.1:5000/user/alice | jq -r .name
+2B. curl -s http://127.0.0.1:5000/user/alice | jq -r '"\(.name) lives in \(.city)."'
+3. curl -s http://127.0.0.1:5000/user/bob | jq -r .email
+6. curl -s http://127.0.0.1:5000/user/alice | jq -r .hobbies[0]
+^ Ważne! Slicing z Pythona dziala, np. .hobbies[-1]
+7. curl -s http://127.0.0.1:5000/user/bob | jq -r '(.hobbies | index("games")) != null'
+7B. curl -s http://127.0.0.1:5000/user/bob | jq -r '.hobbies | contains(["games"])'
+7C. curl -s http://127.0.0.1:5000/user/bob | jq -r '.hobbies | any(. == "games")'
+9. curl -s http://127.0.0.1:5000/user/bob | jq -r '.hobbies | length'
+9B. 
+for u in alice, bob; do
+curl -s http://127.0.0.1:5000/user/$u | jq -r 'select(.hobbies | length > 2)';
+done
+11. curl -s http://127.0.0.1:5000/items | jq -r .[].name
+11B. curl -s http://127.0.0.1:5000/items | jq -r '.[] | .name'
+11C. curl -s http://127.0.0.1:5000/items | jq -r 'map(.name) | .[]'
+13. curl -s http://127.0.0.1:5000/items | jq -r '.[] | select(.price > 20)'
+14. curl -s http://127.0.0.1:5000/items | jq -r 'sort_by(.price)'
+14B. curl -s http://127.0.0.1:5000/items | jq -r 'sort_by(.price) | reverse'
+
+15. curl -s http://127.0.0.1:5000/items | jq -r '[.[].price] | add'
+15B. curl -s http://127.0.0.1:5000/items | jq -r 'map(.price) | add'
+16. curl -s http://127.0.0.1:5000/items | jq -r '.[] | select(.name | contains("item"))'
+16B. curl -s http://127.0.0.1:5000/items | jq -r '.[] | select(.name | test("item"; "i"))'
+17. curl -s http://127.0.0.1:5000/items | jq -r '.[] | select(.price > 10 and .price < 30)'
+19. curl -s -X POST http://127.0.0.1:5000/echo -d '{"a": "b"}'
+19B. curl -s -X POST http://127.0.0.1:5000/echo -H "Content-Type: application/json" -d '{"a": "b"}' | jq -r .
+20. curl -s -X POST http://127.0.0.1:5000/items -H "Content-Type: application/json" -d '{"name": "ABC", "price": 123}' | jq -r .
+21. curl -s -X PUT http://127.0.0.1:5000/items/5 -H "Content-Type: application/json" -d '{"price": 321}' | jq -r .
+22. curl -s -X DELETE http://127.0.0.1:5000/items/3
