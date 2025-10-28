@@ -101,6 +101,82 @@ curl -X 'POST' \
   "result": "Correct ARGON2D hash!"
 
 
+zad5
+generacja:
+curl -X 'GET' \
+  'http://localhost:10005/hash' \
+  -H 'accept: application/json'
+
+haszowanie
+
+htpasswd -bnBC 10 user "nicedelo"
+
+sprawdzenie:
+
+przykladowy haxh_hex:
+$2y$10$C1NRs5SGzftQMaxmvkq.lO52cXuLKdT6hcjYnoK0YChrfTboCznjS
+
+curl -X 'POST' \
+  'http://localhost:10005/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "22c3de9380257748",
+  "hash_hex": "$2y$10$C1NRs5SGzftQMaxmvkq.lO52cXuLKdT6hcjYnoK0YChrfTboCznjS"
+}'
+
+
+
+  "result": "Correct bcrypt hash!"
+
+zad6
+
+```py
+#!/usr/bin/env python3
+import hashlib
+import sys
+
+def md5_hash_string(input_string: str) -> str:
+    md5 = hashlib.md5()
+    md5.update(input_string.encode('utf-8'))
+    return md5.hexdigest()
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        text = " ".join(sys.argv[1:])
+    else:
+        text = "hello world"
+    hash_value = md5_hash_string(text)
+    print(f"MD5 hash of '{text}': {hash_value}")
+```
+
+zad7
+``` py
+
+#!/usr/bin/env python3
+import hashlib
+import sys
+
+def sha256_hash_string(input_string: str) -> str:
+    """
+    Returns the SHA-256 hash of a given string in hexadecimal format.
+    """
+    sha256 = hashlib.sha256()
+    sha256.update(input_string.encode('utf-8'))
+    return sha256.hexdigest()
+
+if __name__ == "__main__":
+    # Pobranie tekstu z argumentów wywołania
+    if len(sys.argv) > 1:
+        text = " ".join(sys.argv[1:])
+    else:
+        text = "hello world"
+
+    hash_value = sha256_hash_string(text)
+    print(f"SHA-256 hash of '{text}': {hash_value}")
+
+```
+
 
   
 
