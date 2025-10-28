@@ -152,6 +152,34 @@ if __name__ == "__main__":
 
 zad7
 ``` py
+#!/usr/bin/env python3
+import hashlib
+import sys
+
+def sha1_hash_string(input_string: str) -> str:
+    """
+    Returns the SHA-1 hash of a given string in hexadecimal format.
+    """
+    sha1 = hashlib.sha1()
+    sha1.update(input_string.encode('utf-8'))
+    return sha1.hexdigest()
+
+if __name__ == "__main__":
+    # Pobranie tekstu z argumentów wywołania
+    if len(sys.argv) > 1:
+        text = " ".join(sys.argv[1:])
+    else:
+        text = "hello world"
+
+    hash_value = sha1_hash_string(text)
+    print(f"SHA-1 hash of '{text}': {hash_value}")
+
+
+
+```
+
+zad8
+``` py
 
 #!/usr/bin/env python3
 import hashlib
@@ -176,6 +204,11 @@ if __name__ == "__main__":
     print(f"SHA-256 hash of '{text}': {hash_value}")
 
 ```
+zad9
+#tego nie wiem jak zrobic
+
+
+zad10
 
 
   
