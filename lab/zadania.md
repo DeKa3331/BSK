@@ -29,8 +29,13 @@ for u in alice bob; do
   echo "$u:" $(curl -s http://127.0.0.1:5000/user/$u | jq -r '.hobbies | length')
 done
 
+curl -s http://127.0.0.1:5000/user/alice | jq -r '.hobbies[]'
+
+curl -s http://127.0.0.1:5000/user/alice http://127.0.0.1:5000/user/bob | jq -r '. as $u | "\($u.name):\n\($u.hobbies[])"'
+
+
 ## 0.10 Wyświetl nazwę użytkownika i miasto jako jeden ciąg znaków, np. "Alice Smith from Warsaw".  
-curl -s http://127.0.0.1:5000/user/alice | jq -r '"\(.name) \(.surname) from \(.city)"'
+curl -s http://127.0.0.1:5000/user/alice | jq -r '"\(.name) from \(.city)."'
 
 ## 0.11 Wyświetl wszystkie przedmioty. Wyświetl nazwy wszystkich przedmiotów.  
 curl -s http://127.0.0.1:5000/items | jq -r '.[].name'
@@ -70,16 +75,19 @@ curl -s -X POST http://127.0.0.1:5000/echo \
 curl -s -X POST http://127.0.0.1:5000/items \
   -H "Content-Type: application/json" \
   -d '{"name": "ABC", "price": 123}' | jq .  
+  
 curl -s http://127.0.0.1:5000/items | jq .
 
 ## 0.21 Za pomocą requestu typu PUT, aktualizuj cenę przedmiotu o numerze 1. Wyświetl wszystkie przedmioty.  
 curl -s -X PUT http://127.0.0.1:5000/items/1 \
   -H "Content-Type: application/json" \
   -d '{"price":321}' | jq .  
+  
 curl -s http://127.0.0.1:5000/items | jq .
 
 ## 0.22 Za pomocą requestu typu DELETE, usuń przedmiot o numerze 3. Wyświetl wszystkie przedmioty.  
 curl -s -X DELETE http://127.0.0.1:5000/items/3 | jq .  
+
 curl -s http://127.0.0.1:5000/items | jq .
 
 ## 0.23 Wyświetl przedmiot o największej cenie.  
@@ -89,6 +97,12 @@ curl -s http://127.0.0.1:5000/items | jq -r 'max_by(.price)'
 curl -s http://127.0.0.1:5000/items | jq -r 'map(.price = (.price * 1.1))'
 
 ## 0.25 Pobierz nazwy wszystkich użytkowników i ich wiek.  
+
+for u in alice bob; do
+  curl -s http://127.0.0.1:5000/user/$u | jq -r '"\(.name): \(.age)"'
+done
+
+###opcja z surname oddzielnie (nie ma)
 for u in alice bob; do
   curl -s http://127.0.0.1:5000/user/$u | jq -r '"\(.name) \(.surname): \(.age)"'
 done
@@ -106,10 +120,12 @@ curl -s http://127.0.0.1:5000/items | jq -r '.[] | select(.price > 100)'
 curl -s -X POST http://127.0.0.1:5000/items \
   -H "Content-Type: application/json" \
   -d '{"name": "NewItem", "price": 50}' | jq .  
+  
 curl -s http://127.0.0.1:5000/items | jq .
 
 ## 0.30 Zaktualizuj przedmiot id=2. Wyświetl odpowiedź serwera i następnie listę wszystkich przedmiotów.  
 curl -s -X PUT http://127.0.0.1:5000/items/2 \
   -H "Content-Type: application/json" \
   -d '{"price": 200}' | jq .  
+  
 curl -s http://127.0.0.1:5000/items | jq .
