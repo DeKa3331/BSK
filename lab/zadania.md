@@ -4,7 +4,7 @@
 curl -s http://127.0.0.1:5000/user/alice | jq .
 
 ## 0.2 Wyświetl imię i nazwisko użytkownika Alice.  
-curl -s http://127.0.0.1:5000/user/alice | jq -r '"\(.name) \(.surname)"'
+curl -s http://127.0.0.1:5000/user/alice | jq -r '.name + " " + .surname'
 
 ## 0.3 Wyświetl adres e-mail użytkownika Bob.  
 curl -s http://127.0.0.1:5000/user/bob | jq -r .email
