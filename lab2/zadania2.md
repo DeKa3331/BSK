@@ -209,6 +209,47 @@ zad9
 
 
 zad10
+do odhashowania mamy:
+sudo docker run -it mazurkatarzyna/hash-identifier:latest
+sudo docker run -it docker.io/mazurkatarzyna/hashid:latest
+i wklejamy hasloLeast Possible Hashs:
+[+] Tiger-160
+[+] Haval-160
+[+] RipeMD-160
+[+] SHA-1(HMAC)
+[+] Tiger-160(HMAC)
+[+] RipeMD-160(HMAC)
+[+] Haval-160(HMAC)
+[+] SHA-1(MaNGOS)
+[+] SHA-1(MaNGOS2)
+[+] sha1($pass.$salt)
+[+] sha1($salt.$pass)
+[+] sha1($salt.md5($pass))
+[+] sha1($salt.md5($pass).$salt)
+[+] sha1($salt.sha1($pass))
+[+] sha1($salt.sha1($salt.sha1($pass)))
+[+] sha1($username.$pass)
+[+] sha1($username.$pass.$salt)
+[+] sha1(md5($pass))
+[+] sha1(md5($pass).$salt)
+[+] sha1(md5(sha1($pass)))
+[+] sha1(sha1($pass))
+[+] sha1(sha1($pass).$salt)
+[+] sha1(sha1($pass).substr($pass,0,3))
+[+] sha1(sha1($salt.$pass))
+[+] sha1(sha1(sha1($pass)))
+[+] sha1(strtolower($username).$pass)
+
+
+zad11
+nie wiem
+zad12
+sudo docker run -it docker.io/mazurkatarzyna/hashid:latest
+6adfb183a4a2c94a2f92dab5ade762a47889a5a1
+zad13
+nie wiem
+zad14
+nie wiem
 
 
   
