@@ -229,19 +229,41 @@ curl -X 'POST' \
 }
 
 
+zad4.15
+TBD
+zad4.16
+curl -X 'GET' \
+  'http://127.0.0.1:4016/hash' \
+  -H 'accept: application/json'
+
+echo -n 'c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db' >hash416.txt
 
 
+sha256-1400
 
+hashcat -a 6 -m 1400 hash416.txt input.txt '?d?d'
+c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db:12345672
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 1400 (SHA2-256)
 
+curl -X 'POST' \
+  'http://127.0.0.1:4016/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "word": "12345672"
+}'
 
-
-
-
-
+{
+  "success": true,
+  "message": "Gratulacje! Poprawnie złamano hash!",
+  "word": "12345672",
+  "hash": "c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db"
+}
 
 
 
   
-
-
 
