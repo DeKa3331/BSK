@@ -199,8 +199,34 @@ curl -X 'POST' \
 }
 
 
+4.14
+generacja:
+ship, zapisuje tylko:
+echo -n '2db3588f39a4001e5e37f6c07bd27936b10924fc' >hash414.txt
 
+rozwiazanie od gpt:
+hashcat -m 100 -a 3 hash_to_crack.txt -1 abc -2 468 -3 '*%:' '?1?2?3'
 
+2db3588f39a4001e5e37f6c07bd27936b10924fc:c6*              
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SHA1)
+
+curl -X 'POST' \
+  'http://127.0.0.1:4014/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "word": "c6*"
+}'
+
+{
+  "success": true,
+  "message": "Gratulacje! Poprawnie złamano hash!",
+  "word": "c6*",
+  "hash": "2db3588f39a4001e5e37f6c07bd27936b10924fc"
+}
 
 
 
