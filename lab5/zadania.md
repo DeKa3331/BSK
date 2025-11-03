@@ -1,4 +1,5 @@
 slowniki musza byc w /home nigdzie indziej inaczej nie zadziala! w tym samym pliku.
+hashcat --help po numerek
 
 zad4.1
 tworzenie:
@@ -96,7 +97,114 @@ deka@SKH-KUBUNTU:~$ curl -X 'POST' \
 
 
 
-zad46
+zad47
+
+crunch minimumZnakow maximumZnakow zCzegoSieSklada
+crunch 3 3 0123456789 -o digits.txt
+Crunch will now generate the following amount of data: 4000 bytes
+0 MB
+0 GB
+0 TB
+0 PB
+Crunch will now generate the following number of lines: 1000 
+
+crunch: 100% completed generating output
+
+
+echo -n '5c7d5705ab73466c0584cc782cb12d2e' >hash47.txt
+ hashcat -m 0 -a 0 hash47.txt digits.txt
+
+ 5c7d5705ab73466c0584cc782cb12d2e:029                      
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+
+curl -X 'POST' \
+  'http://127.0.0.1:4007/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "word": "029"
+}'
+
+{"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "029", "hash": "5c7d5705ab73466c0584cc782cb12d2e"}
+
+
+
+zad4.12
+
+hashcat maski: https://github.com/noobosaurus-r3x/Cheat-sheets/blob/main/Hashcat%20Cheat%20Sheet.md#mask-attack
+
+generacja:
+curl -X 'GET' \
+  'http://127.0.0.1:4012/hash' \
+  -H 'accept: application/json'
+echo -n '99c9e12638272e9beae26726d05b8bf2f6abaf2c' >hash412.txt
+
+
+hashcat -a 3 -m 100 hash412.txt '?l?l?l?l'
+
+99c9e12638272e9beae26726d05b8bf2f6abaf2c:klsa             
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SHA1)
+
+curl -X 'POST' \
+  'http://127.0.0.1:4012/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "word": "klsa"
+}'
+
+{
+  "success": true,
+  "message": "Gratulacje! Poprawnie złamano hash!",
+  "word": "klsa",
+  "hash": "99c9e12638272e9beae26726d05b8bf2f6abaf2c"
+}
+
+
+
+zad4.13
+generujemy tak jak zawsze:
+echo -n '6aeec887749cf0651bd1418576c4d0992d9a5331'>hash413.txt
+
+
+tak bedzie wygladac maska:
+hashcat -m 100 -a 3 hash413.txt '?u?d?d?d'
+
+6aeec887749cf0651bd1418576c4d0992d9a5331:O629             
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SHA1)
+
+
+
+curl -X 'POST' \
+  'http://127.0.0.1:4013/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "word": "O629"
+}'
+
+{
+  "success": true,
+  "message": "Gratulacje! Poprawnie złamano hash!",
+  "word": "O629",
+  "hash": "6aeec887749cf0651bd1418576c4d0992d9a5331"
+}
+
+
+
+
+
+
+
+
 
 
 
