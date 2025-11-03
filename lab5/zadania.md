@@ -240,6 +240,10 @@ echo -n 'c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db' >hash
 
 
 sha256-1400
+  6 | Hybrid Wordlist + Mask
+  7 | Hybrid Mask + Wordlist
+
+
 
 hashcat -a 6 -m 1400 hash416.txt input.txt '?d?d'
 c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db:12345672
@@ -262,6 +266,15 @@ curl -X 'POST' \
   "word": "12345672",
   "hash": "c7ca70b16e73f70ee493f773952b77e190d1afffd5596a8c92bc1ef48926e5db"
 }
+
+zad4.17
+ echo -n 'b877e59a00217961b92230e39e131250de2e44b7d3e7ceeae95a0d858b6b652d' >hash417.txt
+
+
+TBD, koniec zajec
+
+
+
 
 
 
