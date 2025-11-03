@@ -204,7 +204,7 @@ generacja:
 ship, zapisuje tylko:
 echo -n '2db3588f39a4001e5e37f6c07bd27936b10924fc' >hash414.txt
 
-rozwiazanie od gpt:
+lamanie, napierw wpisujemy co chcemy -1abc -2 468 tutaj ustawiamy ze 1 to ma byc tylko a,b lub c itd nastepnie maski na koncu uzywamy z 1,2,3.:
 hashcat -m 100 -a 3 hash_to_crack.txt -1 abc -2 468 -3 '*%:' '?1?2?3'
 
 2db3588f39a4001e5e37f6c07bd27936b10924fc:c6*              
@@ -227,6 +227,8 @@ curl -X 'POST' \
   "word": "c6*",
   "hash": "2db3588f39a4001e5e37f6c07bd27936b10924fc"
 }
+
+
 
 
 
