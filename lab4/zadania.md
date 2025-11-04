@@ -33,7 +33,35 @@ curl -X 'POST' \
 
   prywant klucz upload:
   curl -X 'POST' \
+
+
+zad3.2
+
+generacja za pomoca krzywej:
+openssl genpkey -algorithm EC -pkeyopt ec_paramgen_curve:prime256v1 -out ecpriv.pem
   'http://127.0.0.1:3001/upload/private' \
   -H 'accept: application/json' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@priv.pem;type=application/x-x509-ca-cert'
+
+
+  z prywatnego publiczny:
+openssl ec -in ecpriv.pem -pubout -out ecpub.pem
+upload publiczny;
+curl -X 'POST' \
+  'http://127.0.0.1:3002/upload/ec/public' \
+  -H 'accept: */*' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@ecpub.pem;type=application/x-x509-ca-cert'
+
+  upload prywatny:
+curl -X 'POST' \
+  'http://127.0.0.1:3002/upload/ec/private' \
+  -H 'accept: */*' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@ecpriv.pem;type=application/x-x509-ca-cert'
+
+  zad3.3 
+  zrobione jako 1sze poprostu dlugosc losowa akurat sie trafila
+
+  zad3.4
