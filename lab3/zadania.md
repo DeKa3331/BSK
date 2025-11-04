@@ -1,3 +1,6 @@
+Ten plik jest do przerobienia na nowo:
+
+
 zad2.1
 curl -X 'GET' \
   'http://127.0.0.1:2001/encrypt' \
@@ -81,9 +84,30 @@ cat: 26.enc: No such file or directory
 deka@SKH-KUBUNTU:~$ cat zad26.enc
 4tZz/XuaKrDsduTVC4qqcw==
 
-zad2.7
+zad2.7 (nie dziala)
+echo -n 'Hc7ij7stvtYKbugbe2N5PWgbwE0FY2yGSQpiDxwD404=' >zad27.enc
+echo -n '2f2524db72d0763e3010c93a81622f84'> wektor27.IV
+echo -n 'balla17' >key27
 
-openssl enc -d -aes-256-cbc -in zad27.enc -out zad27.dec -pbkdf2 -pass:$(cat pass27.txt) -base64
+openssl enc -d -aes-256-cbc -in zad27.enc -K $(cat key27) -K $(cat wektor27.IV) -out zad27.dec -base64
+
+zad2.8 (nie dziala)
+generacja:
+
+curl -X 'GET' \
+  'http://localhost:2008/decrypt' \
+  -H 'accept: application/json'
+
+  {"encrypted_b64":"7Lz6XbQ9lZFuAKAyh8viShYfU5HraH6L","iv_hex":"f52a2d71187afcbb","password":"sh3184","session_id":"00e20e06fec35ffa"}
+
+
+echo -n 'sh3184' > password.txt
+echo -n 'f52a2d71187afcbb' >key28.IV
+echo -n '7Lz6XbQ9lZFuAKAyh8viShYfU5HraH6L' >zad28.enc
+
+
+openssl enc -d -des-ede3-cbc -in zad28.enc -out zad28.dec-pbkdf2 -pass:$(cat password.txt) -iv $(cat key28.IV) -base64
+
 
 
 
@@ -93,6 +117,7 @@ openssl enc -d -aes-256-cbc -in zad27.enc -out zad27.dec -pbkdf2 -pass:$(cat pas
 
 
  
+
 
 
 
