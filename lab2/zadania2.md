@@ -1,3 +1,6 @@
+w tej lekcji sa problemy z bcryptem tylko ostatnie zadania
+
+
 zad1
 generujemy wyraz:
 
@@ -241,8 +244,9 @@ i wklejamy hasloLeast Possible Hashs:
 [+] sha1(strtolower($username).$pass)
 
 
-zad11
-nie wiem
+zad11  
+nie wiem  
+generalnie wiem ze to bcrypt ale jak to rozpoznac komendami?
 zad12
 sudo docker run -it docker.io/mazurkatarzyna/hashid:latest
 6adfb183a4a2c94a2f92dab5ade762a47889a5a1
