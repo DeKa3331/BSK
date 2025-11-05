@@ -245,16 +245,32 @@ i wklejamy hasloLeast Possible Hashs:
 
 
 zad11  
-nie wiem  
-generalnie wiem ze to bcrypt ale jak to rozpoznac komendami?
+nie dziala bo jak rozumiem to hashid dopiero wykrywa bcrypta?  
 zad12
 sudo docker run -it docker.io/mazurkatarzyna/hashid:latest
 6adfb183a4a2c94a2f92dab5ade762a47889a5a1
 zad13
-nie wiem
+udo docker run mazurkatarzyna/hashid:latest '$2y$10$xbyAv5a46CQYPay5UISCNeFWpVdx2qvhCBEOZ/YtfxoVXhOGrVKQa'
+Analyzing '$2y$10$xbyAv5a46CQYPay5UISCNeFWpVdx2qvhCBEOZ/YtfxoVXhOGrVKQa'
+[+] Blowfish(OpenBSD) 
+[+] Woltlab Burning Board 4.x 
+[+] bcrypt 
+czyli dla nas to bedzie bcrypt
 zad14
-nie wiem
+```
+import hashlib
 
+# dane wejściowe
+text = "R3iSrSNmgU9SFHxVekUD"
+expected_hash = "48cab4b54bef42fddaa6353c68a20b369f40026e"
+
+# obliczenie hasha SHA-1
+computed_hash = hashlib.sha1(text.encode()).hexdigest()
+
+# wynik
+print("Obliczony hash:", computed_hash)
+print("Zgadza się:", computed_hash == expected_hash)
+```
 
   
 
