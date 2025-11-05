@@ -1,3 +1,6 @@
+w tej lekcji mialem duzo problemow bo z tymi kluczami to wiecej nie dziala niz dziala
+
+
 zad3.1
 -generuje dwa klucze publiczny i prywatny, aktualnie w pliku mamy tylko prywany:
 openssl genpkey -algorithm RSA -out priv.pem -pkeyopt rsa_keygen_bits:1024
@@ -65,3 +68,20 @@ curl -X 'POST' \
   zrobione jako 1sze poprostu dlugosc losowa akurat sie trafila
 
   zad3.4
+
+  generacja klucza za pomoca requesta get:
+curl -X 'GET' \
+  'http://127.0.0.1:3004/getprivkey' \
+  -H 'accept: */*'
+
+
+zajeciowa wersja (bez ostatniego):
+curl -X GET http://127.0.0.1:3004/getprivkey
+
+ zapis do pliku wygenerowanego klucza:
+curl -X GET http://127.0.0.1:3004/getprivkey -o genpriv.pem
+
+zeby sie nie bawic z enterami na koncu:
+jq -r '.private_key_pem' genpriv.pem > priv.pem
+generacja publicznego z tego:
+openssl pkey -in testpriv.pem -pubout -out genpriv.pub
