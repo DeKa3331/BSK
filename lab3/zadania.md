@@ -1,60 +1,3 @@
-Ten plik jest do przerobienia na nowo:
-
-
-
-
-zad2.4
-decrytpuje to co wczesniej:
-deka@SKH-KUBUNTU:~$ openssl enc -d -camellia-128-ecb -in zad23.enc -out zad24.dec -K $(cat keyhex) -base64
-deka@SKH-KUBUNTU:~$ cat zad24.dec
-suppergirldeka@SKH-KUBUNTU:~$ 
-
-zad2.5
-└──╼ $openssl enc -aria-192-ecb -in zad25.txt -out zad25.enc -K $(cat key25) -base64
-
-└──╼ $openssl enc -d -aria-192-ecb -in zad25.enc -out zad25.dec -K $(cat key25) -base64
-
-zad2.6
-curl -X 'GET' \
-  'http://localhost:2006/encrypt' \
-  -H 'accept: application/json'
-{"session_id":"793e0fdc4bd100ea","word":"tekieronene"}
-deka@SKH-KUBUNTU:~$ openssl rand -hex 16 > key26
-deka@SKH-KUBUNTU:~$ openssl rand -hex 16 >wektor.IV
-deka@SKH-KUBUNTU:~$ echo -n 'tekieronene' > zad26.txt
-deka@SKH-KUBUNTU:~$ openssl enc -aes-128-ecb -in zad26.txt -K $(cat key26) -K $(cat wektor.IV) -out zad26.enc -base64
-deka@SKH-KUBUNTU:~$ cat 26.enc
-cat: 26.enc: No such file or directory
-deka@SKH-KUBUNTU:~$ cat zad26.enc
-4tZz/XuaKrDsduTVC4qqcw==
-
-zad2.7 (nie dziala)
-echo -n 'Hc7ij7stvtYKbugbe2N5PWgbwE0FY2yGSQpiDxwD404=' >zad27.enc
-echo -n '2f2524db72d0763e3010c93a81622f84'> wektor27.IV
-echo -n 'balla17' >key27
-
-openssl enc -d -aes-256-cbc -in zad27.enc -K $(cat key27) -K $(cat wektor27.IV) -out zad27.dec -base64
-
-zad2.8 (nie dziala)
-generacja:
-
-curl -X 'GET' \
-  'http://localhost:2008/decrypt' \
-  -H 'accept: application/json'
-
-  {"encrypted_b64":"7Lz6XbQ9lZFuAKAyh8viShYfU5HraH6L","iv_hex":"f52a2d71187afcbb","password":"sh3184","session_id":"00e20e06fec35ffa"}
-
-
-echo -n 'sh3184' > password.txt
-echo -n 'f52a2d71187afcbb' >key28.IV
-echo -n '7Lz6XbQ9lZFuAKAyh8viShYfU5HraH6L' >zad28.enc
-
-
-openssl enc -d -des-ede3-cbc -in zad28.enc -out zad28.dec-pbkdf2 -pass:$(cat password.txt) -iv $(cat key28.IV) -base64
-
-
-
-
 zad2.1
 generacja: curl -X 'GET' \
   'http://127.0.0.1:2001/encrypt' \
@@ -163,7 +106,7 @@ curl -X 'POST' \
 }
 
 
-zad2.4
+zad2.4-nie dziala
 generacja:
 curl -X 'GET' \
   'http://localhost:2004/decrypt' \
@@ -183,7 +126,89 @@ znowu ten blad:
 bad decrypt
 4077278113750000:error:1C80006B:Provider routines:ossl_cipher_generic_block_final:wrong final block length:../providers/implementations/ciphers/ciphercommon.c:429:
 
+
+zad2.5
+generacja:
+
+curl -X 'GET' \
+  'http://localhost:2005/encrypt' \
+  -H 'accept: application/json'
+{"session_id":"2acab34e0c970a27","word":"mmnarak"}
+
+zapis do pliku:
+echo -n 'mmnarak' >word.txt
+
+generacja klucza 192:
+openssl rand -hex 24 > key
+
+szyfrowanie:
+openssl enc -aria-192-ecb -in word.txt -out zad25.enc -K $(cat key) -base64
+test:
+cat zad25.enc
+SfR4yKC5mU1Xw+TLa0oTEw==
+
+deszyfrowanie tego samoe:
+openssl enc -d -aria-192-ecb -in zad25.enc -out zad25.dec -K $(cat key) -base64
+
+cat zad25.dec
+mmnarak
+
+zad2.6---tutaj pytanie czy tak powinna wygladac skladnia z tym iv?
+generacja:
+curl -X 'GET' \
+  'http://localhost:2006/encrypt' \
+  -H 'accept: application/json'
+
   
+{"session_id":"3ceb89363fd76ba8","word":"evilperson"}
+
+
+zapis do pliku:
+echo -n 'evilperson' >word.txt
+
+generacja klucza 128:
+openssl rand -hex 16 > key
+openssl rand -hex 16 >wektor.IV
+
+szyfrowanie:
+openssl enc -aes-128-cbc -in word.txt -K $(cat key) -iv $(cat wektor.IV) -out zad26.enc -base64
+
+test:
+cat zad26.enc
+4I+mQZlKDPBmsI2N/i5D2g==
+
+
+curl -X 'POST' \
+  'http://localhost:2006/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "3ceb89363fd76ba8",
+  "encrypted_b64": "4I+mQZlKDPBmsI2N/i5D2g==",
+  "key_hex": "6d077f68715d0698e5b7fad1d1fbc6eb",
+  "iv_hex": "6512e1823eb844180573cab8dee49889"
+}'
+
+{
+  "result": "Correct encryption!"
+}
+
+zad2.7
+
+generacja:
+ curl -X 'GET' \
+  'http://localhost:2007/decrypt' \
+  -H 'accept: application/json'
+  
+{"encrypted_b64":"yejJag3Ss8jxXeKKMbiY7JFS0JA5MYGB5ReLwJsFSxA=","iv_hex":"aebd8d0726a10d01df343faa48fa1bdd","password":"115657","session_id":"b61bd51656e7fd44"}
+
+echo -n 'yejJag3Ss8jxXeKKMbiY7JFS0JA5MYGB5ReLwJsFSxA' >zad27.enc
+
+
+
+
+
+
 
   
 
