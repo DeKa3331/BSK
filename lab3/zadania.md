@@ -334,23 +334,24 @@ cat image.enc
 ale jest tak duze ze tego nie wklejam tutaj :)
 
 
+jak powinien wyglada submit tez nie wiem wsm???
+
+
 curl -X 'POST' \
   'http://localhost:2011/submit' \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
+  -F 'file=@image.enc;type=application/x-x509-ca-cert'
   -d '{
   "session_id": "4dc13670-6557-4752-98ef-6184d3f93d09",
-  "encrypted_data":"".
 }'
 
 {
   "result": "Correct decryption!"
 }
 
-
-{"session_id": "...", "encrypted_data": "base64..."}
-
-
+2.12
+analogicznie do 2.11 nie wiem dokonca jak zrobic :(
 
 
 
