@@ -193,19 +193,120 @@ curl -X 'POST' \
   "result": "Correct encryption!"
 }
 
-zad2.7
+zad2.7---tutaj wspieralem cie gpt juz
 
 generacja:
  curl -X 'GET' \
   'http://localhost:2007/decrypt' \
   -H 'accept: application/json'
   
-{"encrypted_b64":"yejJag3Ss8jxXeKKMbiY7JFS0JA5MYGB5ReLwJsFSxA=","iv_hex":"aebd8d0726a10d01df343faa48fa1bdd","password":"115657","session_id":"b61bd51656e7fd44"}
+{"encrypted_b64":"09BSb4MUW4qb/o7BEKobJ9mffdiBIVDsXKsffdhrtrU=","iv_hex":"d27b64ad5a219930ee6f5df498b88f0e","password":"roro2008","session_id":"c630dc6fce76d3b6"}
 
-echo -n 'yejJag3Ss8jxXeKKMbiY7JFS0JA5MYGB5ReLwJsFSxA' >zad27.enc
+kodowanie do pliku:
+najpierw musimy zamienic nasze base64 na zakodowany
+echo -n '09BSb4MUW4qb/o7BEKobJ9mffdiBIVDsXKsffdhrtrU=' > zad27.b64
+base64 -d zad27.b64 > zad27.enc
+echo -n 'd27b64ad5a219930ee6f5df498b88f0e' > wektor27.IV
+echo -n 'roro2008' > password
+
+deszyfrowanie, (bez soli):
+openssl enc -d -aes-256-cbc -in zad27.enc -out zad27.dec -pbkdf2 -nosalt -pass pass:$(cat password) -iv $(cat wektor27.IV)
+
+
+test:
+curl -X 'POST' \
+  'http://localhost:2007/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "c630dc6fce76d3b6",
+  "decrypted_word": "sourstraw"
+}'
+
+{
+  "result": "Correct decryption!"
+}
+
+zad2.8
+
+generacja:
+curl -X 'GET' \
+  'http://localhost:2008/decrypt' \
+  -H 'accept: application/json'
+
+  {"encrypted_b64":"53VGXquP0h8drpsum1c16m/bv477l/F/","iv_hex":"17e2a8e514d45fea","password":"tayboo12","session_id":"a64119f895011885"}
+
+zapis do plikow:
+echo -n '53VGXquP0h8drpsum1c16m/bv477l/F/' > zad28.b64
+base64 -d zad27.b64 > zad28.enc
+echo -n '17e2a8e514d45fea' > wektor28.IV
+echo -n 'tayboo12' > password
+
+deszyfrowanie:
+openssl enc -d -des-ede3-cbc -in zad28.enc -out zad28.dec -pbkdf2 -nosalt -pass pass:$(cat password) -iv $(cat wektor28.IV)
+test:
+cat zad28.dec
+sent848neat363
+
+curl -X 'POST' \
+  'http://localhost:2008/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "a64119f895011885",
+  "decrypted_word": "sent848neat363"
+}'
+
+{
+  "result": "Correct decryption!"
+}
+
+zad2.9---tego nie wiem jak zrobic nie dziala (moje domysly)
+
+generacja:
+curl -X 'GET' \
+  'http://localhost:2009/decrypt' \
+  -H 'accept: application/json'
+
+{"encrypted_b64":"Ruufpb6GYJkta+jSHB01FeNyp7aB9LeAQW39NGeVwrc=","password":"maryjane9","session_id":"63fced7970d81ec2"}
+
+zapis do plikow:
+echo -n 'Ruufpb6GYJkta+jSHB01FeNyp7aB9LeAQW39NGeVwrc=' > zad29.b64
+base64 -d zad29.b64 > zad29.enc
+echo -n 'maryjane9' > password
+
+
+openssl enc -d -aes-256-ecb -in zad29.enc -out zad29.dec -pbkdf2 -nosalt -iter 356 -pass pass:$(cat password)
+
+
+zad2.10
+curl -X 'GET' \
+  'http://localhost:2010/decrypt' \
+  -H 'accept: application/json'
+
+(tutaj byl ciekawy case bo iv_hex sie wylosowal jako null i nie wiedzialem co wtedy)
+
+takie dane:
+{"encrypted_b64":"a4SXD8y0oshfd+K2LcuGE7KyjjiV9JOR","iv_hex":null,"key_hex":"b5cdd0aa4afc2eea1f9e35e67686a4f0","session_id":"d1da692cbb7b465d"}
+
+
+{"encrypted_b64":"b0Hdgq+BJKto9mItTbRo/g==","iv_hex":"ae1a43af767da136f0709934161eb6bb","key_hex":"cf5efd0ab7bc00c4698501f3cba30a89cabc5fc551bcce14","session_id":"7b3b020177f2d1ac"}
+
+echo -n 'b0Hdgq+BJKto9mItTbRo/g==' > zad210.b64
+base64 -d zad210.b64 > zad210.enc
+echo -n 'cf5efd0ab7bc00c4698501f3cba30a89cabc5fc551bcce14' > key
+echo -n 'ae1a43af767da136f0709934161eb6bb' >wektor210.IV
+
+deszyfrowanie:
+openssl enc -d -aes-192-cbc -in zad210.enc -out zad210.dec -K $(cat key) -iv $(cat wektor210.IV)
 
 
 
+
+
+
+
+  
 
 
 
