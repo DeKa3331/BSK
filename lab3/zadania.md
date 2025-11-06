@@ -1,63 +1,7 @@
 Ten plik jest do przerobienia na nowo:
 
 
-zad2.1
-curl -X 'GET' \
-  'http://127.0.0.1:2001/encrypt' \
-  -H 'accept: application/json'
 
-zapisujemy to do pliku mozna tez sobie wygenerowac jakiegos gotowego hexa w ten sposob:
-openssl rand -hex 32 > key
-albo wpisac go:
-echo -n '2cabe041cab4ff0d8018d77b1dda10795dc7a3eb077a33d8b095a7ab1dbd51b3' > key
-wyraz:
-echo -n 'Hello' > zad1.txt
-
-openssl enc -aes-256-ecb -in zad1.txt -K $(cat key) -out zad1.enc -base64
-
-deka@SKH-KUBUNTU:~$ cat zad1.enc
-VRQ9o8hNIFUfBHzL7q5i5w==
-
-test:
-curl -X 'POST' \
-  'http://127.0.0.1:2001/submit' \
-  -H 'accept: */*' \
-  -H 'Content-Type: application/json' \
-  -d '{
-  "session_id": "3437d2aeb87e348b",
-  "encrypted_b64": "ewtkSWTU04ttF6so2DDkrw=="
-}'
-{"result":"Correct encryption!"}
-
-zad2.2
-curl -X 'GET' \
-  'http://localhost:2002/decrypt' \
-  -H 'accept: application/json'
-
-  aby odszyfrowac uzywamy:
-   openssl enc -d -aes-256-ecb -in zad1.enc -out zad1.dec -K $(cat key) -base64
-
-
-zad1.enc-to wyraz zaszyfrowany 
-a key to klucz np:
-$ echo -n '0b0506b2e8ace255f499cc4c28fcd87f21a84c12adf6937cf1ade0195254d078' > keyhex
-
-zad2.3
-curl -X 'GET' \
-  'http://localhost:2003/encrypt' \
-  -H 'accept: application/json'
-{"key_hex":"518c0283dda28d5f536af3acfc801de7","session_id":"967bd4dc462abb65","word":"suppergirl"}
-klucz:
-deka@SKH-KUBUNTU:~$ echo -n '518c0283dda28d5f536af3acfc801de7' >keyhex
- wyraz:
- deka@SKH-KUBUNTU:~$ echo -n 'suppergirl' > wyraz
- 
-deka@SKH-KUBUNTU:~$ openssl enc -camellia-128-ecb -in wyraz -out zad23.enc -K $(cat keyhex) -base64
-deka@SKH-KUBUNTU:~$ cat zad23.enc
-kICyqvUvprwWBC+SgXVq6A==
-
-
-{"result":"Correct encryption!"}
 
 zad2.4
 decrytpuje to co wczesniej:
@@ -110,6 +54,136 @@ openssl enc -d -des-ede3-cbc -in zad28.enc -out zad28.dec-pbkdf2 -pass:$(cat pas
 
 
 
+
+zad2.1
+generacja: curl -X 'GET' \
+  'http://127.0.0.1:2001/encrypt' \
+  -H 'accept: application/json'
+
+  {"key_hex":"19739c5e15ae557cb2c7c0945b5ad5bb13c54e5b7cb039d8745c0f6ca5008f6c","session_id":"41a2123ecbf953b1","word":"feb212"}
+
+zapisujemy to do pliku mozna tez sobie wygenerowac jakiegos gotowego hexa w ten sposob:
+openssl rand -hex 32 > key
+albo wpisac go:
+echo -n '19739c5e15ae557cb2c7c0945b5ad5bb13c54e5b7cb039d8745c0f6ca5008f6c' > key
+wyraz:
+echo -n 'feb212' > zad1.txt
+
+szyfrowanie:
+openssl enc -aes-256-ecb -in zad1.txt -K $(cat key) -out zad1.enc -base64
+
+zawartosc wyglada tak:
+cat zad1.enc
++r2rq8u5yrTvZuqLmCP5Jw==
+deka@SKH-KUBUNTU:~$ 
+
+testowanie:
+curl -X 'POST' \
+  'http://127.0.0.1:2001/submit' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "41a2123ecbf953b1",
+  "encrypted_b64": "+r2rq8u5yrTvZuqLmCP5Jw=="
+}'
+
+"result":"Correct encryption!"}
+
+zad2.2----tutaj zadac pytania:
+
+curl -X 'GET' \
+  'http://localhost:2002/decrypt' \
+  -H 'accept: application/json'
+
+{"encrypted_b64":"QS4ZtK6WZcjmuX46jqQPzg==","key_hex":"faa93a7bfab3a4be1b0a8135613aef714a5f8c2b66b86a60f78c93dc76bcf6e0","session_id":"8338a903b10ffa3f"}
+
+
+ustawianei plikow:
+echo -n 'faa93a7bfab3a4be1b0a8135613aef714a5f8c2b66b86a60f78c93dc76bcf6e0'  > key
+echo -n 'QS4ZtK6WZcjmuX46jqQPzg==' >zad1.enc
+
+deszyfrowanie wyglada tak ( z tego co rozumiem):
+
+openssl enc -d -aes-256-ecb -in zad1.enc -out zad1.dec -K $(cat key) -base64
+
+i co ciekawe to zadziala jesli uzyje danych z 1szego zadania natomiast jesli chce uzyc tych wygenerowanych to wersja gpt dopiero dziala czemu? nie wiem.
+
+
+
+tak mi poprawil gpt, i nie dokonca to rozumiem czemu tak
+base64 -d zad1.enc | openssl enc -d -aes-256-ecb -K $(cat key) -nosalt -nopad -out zad1.dec
+
+test:
+curl -X 'POST' \
+  'http://localhost:2002/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "8338a903b10ffa3f",
+  "decrypted_word": "mrsmia1"
+}'
+
+{
+  "result": "Correct decryption!"
+}
+
+zad2.3
+generacja:
+curl -X 'GET' \
+  'http://localhost:2003/encrypt' \
+  -H 'accept: application/json'
+
+  
+{"key_hex":"429e015ad94bd1a2c8d7b43c74a3289d","session_id":"350842e2af848b27","word":"mindy7"}
+
+
+echo -n '429e015ad94bd1a2c8d7b43c74a3289d' > key
+echo -n 'mindy7' >wyraz.txt 
+
+szyfrowanie:
+openssl enc -camellia-128-ecb -in wyraz.txt -out zad23.enc -K $(cat key) -base64
+
+zawartosc:
+cat zad23.enc
+Syj6tMZES+TQjK/owkPocQ==
+
+test:
+curl -X 'POST' \
+  'http://localhost:2003/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "350842e2af848b27",
+  "encrypted_b64": "Syj6tMZES+TQjK/owkPocQ=="
+}'
+
+
+{
+  "result": "Correct encryption!"
+}
+
+
+zad2.4
+generacja:
+curl -X 'GET' \
+  'http://localhost:2004/decrypt' \
+  -H 'accept: application/json'
+
+{"encrypted_b64":"R85zKZPZuYS3SurCIGYOfg==","key_hex":"0bdbd361c60ed0cc573711628a5c0483","session_id":"71453384a469410c"}
+
+
+zapis do plikow:
+echo -n 'R85zKZPZuYS3SurCIGYOfg==' > zad24.enc
+echo -n '0bdbd361c60ed0cc573711628a5c0483' > key
+
+openssl enc -d -camellia-128-ecb -in zad24.enc -out zad24.dec -K $(cat key) -base64
+
+
+znowu ten blad:
+bad decrypt
+4077278113750000:error:1C80006B:Provider routines:ossl_cipher_generic_block_final:wrong final block length:../providers/implementations/ciphers/ciphercommon.c:429:
+
+  
 
   
 
