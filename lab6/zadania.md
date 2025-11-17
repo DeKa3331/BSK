@@ -490,18 +490,38 @@ curl -X POST "http://localhost:5007/submit" -H  "accept: application/json" -H  "
   "word": "simple"
 }
   
+zad5.8
+
+deka@SKH-KUBUNTU:~$curl -X GET "http://localhost:5008/sign" -o zad58.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2615  100  2615    0     0   2253      0  0:00:01  0:00:01 --:--:--  2254
 
 
 
+deka@SKH-KUBUNTU:~$ unzip zad58.zip
+Archive:  zad58.zip
+replace word.txt? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
+  inflating: word.txt                
+  inflating: public_key.asc          
+  inflating: private_key.asc         
+  inflating: session_id.txt    
+
+ gpg --import private_key.asc
 
 
+gpg --sign -u C32F2976C4E1C2F233FC6DCBAC70C57414D2EBCE word.txt
+curl -X POST "http://localhost:5008/submit" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "session_id=64b6cb667c62c137283fd2b375eb29cc" -F "signed_file=@word.txt.gpg;type=application/pgp-encrypted"
 
+
+{
+  "status": "success",
+  "message": "✍️ Gratulacje! Poprawnie podpisałeś plik!",
+  "word": "mike",
+  "signer": "Sign Challenge <sign@example.com>",
+  "signature_valid": true
+}
   
-
-
-
-
-
 
 
 
