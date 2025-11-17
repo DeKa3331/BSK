@@ -323,6 +323,162 @@ deka@SKH-KUBUNTU:~$ curl -X POST http://127.0.0.1:5003/submit/private -F "file=@
 }
 
 
+zad5.4
+
+deka@SKH-KUBUNTU:~$ curl -X GET "http://localhost:5004/decrypt" -H  "accept: application/zip" -o zad54.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   519  100   519    0     0    385      0  0:00:01  0:00:01 --:--:--   385
+deka@SKH-KUBUNTU:~$ unzip zad54.zip
+Archive:  zad54.zip
+  inflating: encrypted.txt           
+  inflating: passphrase.txt          
+  inflating: session_id.txt          
+deka@SKH-KUBUNTU:~$ 
+
+
+deka@SKH-KUBUNTU:~$ cat passphrase.txt
+admin
+
+deka@SKH-KUBUNTU:~$ gpg --cipher-aGNU Privacy Guard - GPG Zadania
+5.5 Pod adresem http: // 127. 0. 0. 1: 5005 dziaªa prosty serwer HTTP udost¦pniaj¡cy 2 endpointy: http:
+// 127. 0. 0. 1: 5005/ encrypt oraz http: // 127. 0. 0. 1: 5005/ submit .
+(a) Uruchom serwer za pomoc¡ poni»szego polecenia:
+docker run -p 5005:5005 --name ex5 docker.io/mazurkatarzyna/gpg-ex5:latest
+podman run -p 5005:5005 --name ex5 docker.io/mazurkatarzyna/gpg-ex5:latest
+Je±li Docker Hub nie odpowiada, u»yj obrazu zapasowego:
+docker run -p 5005:5005 --name ex5 ghcr.io/mazurkatarzynaumcs/gpg-ex5:latest
+podman run -p 5005:5005 --name ex5 ghcr.io/mazurkatarzynaumcs/gpg-ex5:latest
+(b) Wy±lij request do endpointa http://127.0.0.1:5005/encrypt u»ywaj¡c meody HTTP GET. W od-
+powiedzi od serwera otrzymasz sªowo do zaszyfrowania (jako word_to_encrypt), hasªo potrzebne do
+szyfrowania (jako passphrase) oraz id sesji (jako session_id).
+(c) Zaszyfruj odebrane od serwera sªowo (word_to_encrypt) za pomoc¡ algorytmu AES128 oraz odebra-
+nego od serwera hasªa (passphrase). Zaszyfrowane sªowo ma by¢ równie» zakodowane przy pomocy
+kodowania base64.
+(d) Wy±lij request do endpointa http://127.0.0.1:5005/submit u»ywaj¡c meody HTTP POST i prze±lij
+do serwera id sesji (jako session_id) oraz zaszyfrowany i zakodowany plik (jako plik, encrypted_file).lgo CAMELLIA128 --decrypt encrypted.txt>decrypted.txt
+gpg: CAMELLIA128.CFB encrypted data
+gpg: encrypted with 1 passphrase
+deka@SKH-KUBUNTU:~$ 
+(haslo wpisujemy z passphrase u mnie admin)
+
+test:
+curl -X POST "http://localhost:5004/submit" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{  \"decrypted_text\": \"password\",  \"session_id\": \"92358d1a855d1d5236a94b5591545d4e\"}"
+
+{
+  "message": "Gratulacje! Poprawnie odszyfrowałeś plik!",
+  "passphrase_used": "admin",
+  "secret_word": "password",
+  "status": "success"
+}
+
+zad5.5
+
+
+
+
+
+curl -X GET "http://localhost:5005/encrypt" -H  "accept: application/json"{
+  "session_id": "b847500304f1788e9c992f4969415fdd",
+  "word_to_encrypt": "celtics",
+  "passphrase": "roses",
+  "algorithm": "AES128",
+  "instructions": "Użyj GPG do zaszyfrowania słowa algorytmem AES128 z podanym hasłem. Następnie wyślij zaszyfrowany plik do /submit wraz z session_id."
+
+
+echo -n 'celtics' > zad55.txt
+
+
+gpg --symmetric --cipher-algo AES128 --armor --output enc55.txt zad55.txt
+haslo wpisujemy z polecenia:roses
+
+deka@SKH-KUBUNTU:~$ cat enc55.txt
+-----BEGIN PGP MESSAGE-----
+
+jA0EBwMCJv9j0krPfnH/0kYBiH/kuG8cdfr6HjmzTeAddP5cfGO+G4PsTa5YO0M1
+y8q63LKRoY08aPnJ2928zvXAdv8s+IPl8hX8lC/AcOaWfWnghMcN
+=8c8Z
+-----END PGP MESSAGE-----
+
+
+curl -X POST "http://localhost:5005/submit" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "session_id=b847500304f1788e9c992f4969415fdd" -F "encrypted_file=@enc55.txt;type=text/plain"
+
+
+{
+  "status": "success",
+  "message": "Gratulacje! Poprawnie zaszyfrowałeś plik!",
+  "word": "celtics",
+  "passphrase_used": "roses"
+}
+
+zad5.6
+
+}deka@SKH-KUBUNTU:~$ curl -X get http://127.0.0.1:5006/encrypt -o zad56.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  2637  100  2637    0     0   4766      0 --:--:-- --:--:-- --:--:--  4759
+
+deka@SKH-KUBUNTU:~$ unzip zad56.zip
+Archive:  zad56.zip
+replace word.txt? [y]es, [n]o, [A]ll, [N]one, [r]ename: y
+  inflating: word.txt                
+  inflating: public_key.asc          
+  inflating: private_key.asc         
+replace session_id.txt? [y]es, [n]o, [A]ll, [N]one, [r]ename: y
+  inflating: session_id.txt   
+
+
+jak nie mamy to mozemy dodac nowy klucz:
+deka@SKH-KUBUNTU:~$ gpg --import public_key.asc
+gpg: key 4DD9C937F5634DA6: public key "Challenge User <challengex6@example.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+
+
+deka@SKH-KUBUNTU:~$ gpg --encrypt --recipient D1342FBAD3855680D529FDBF4DD9C937F5634DA6 --armor --output encrypted.txt  word.txt
+gpg: 4DD9C937F5634DA6: There is no assurance this key belongs to the named user
+
+pub  rsa2048/4DD9C937F5634DA6 2025-11-17 Challenge User <challengex6@example.com>
+ Primary key fingerprint: D134 2FBA D385 5680 D529  FDBF 4DD9 C937 F563 4DA6
+
+It is NOT certain that the key belongs to the person named
+in the user ID.  If you *really* know what you are doing,
+you may answer the next question with yes.
+
+Use this key anyway? (y/N) y
+File 'encrypted.txt' exists. Overwrite? (y/N) y
+
+
+
+curl -X POST "http://localhost:5006/submit" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "session_id=2915975e86338f370c054d7738d5da24" -F "encrypted_file=@encrypted.txt;type=text/plain"
+
+
+
+{
+  "status": "success",
+  "message": "Gratulacje! Poprawnie zaszyfrowałeś plik!",
+  "word": "april"
+}
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
