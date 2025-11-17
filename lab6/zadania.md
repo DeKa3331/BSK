@@ -460,6 +460,36 @@ curl -X POST "http://localhost:5006/submit" -H  "accept: application/json" -H  "
   "word": "april"
 }
 
+zad5.7
+deka@SKH-KUBUNTU:~$ curl -X get http://127.0.0.1:5007/decrypt -o zad57.zip
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  3363  100  3363    0     0   7924      0 --:--:-- --:--:-- --:--:--  7931
+
+deka@SKH-KUBUNTU:~$ unzip zad57.zip
+Archive:  zad57.zip
+replace public_key.asc? [y]es, [n]o, [A]ll, [N]one, [r]ename: A
+  inflating: public_key.asc          
+  inflating: private_key.asc         
+  inflating: encrypted_word.asc      
+  inflating: session_id.txt          
+  inflating: README.txt   
+
+
+gpg --import private_key.asc
+
+gpg --decrypt encrypted_word.asc
+
+curl -X post http://127.0.0.1:5007/submit
+
+curl -X POST "http://localhost:5007/submit" -H  "accept: application/json" -H  "Content-Type: multipart/form-data" -F "session_id=92d19001863fb3ce6b41811b05c70c2a" -F "decrypted_word=simple"
+
+{
+  "status": "success",
+  "message": "🎉 Gratulacje! Poprawnie odszyfrowałeś słowo!",
+  "word": "simple"
+}
+  
 
 
 
