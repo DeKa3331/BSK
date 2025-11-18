@@ -268,15 +268,41 @@ curl -X 'GET' \
   'http://localhost:2009/decrypt' \
   -H 'accept: application/json'
 
-{"encrypted_b64":"Ruufpb6GYJkta+jSHB01FeNyp7aB9LeAQW39NGeVwrc=","password":"maryjane9","session_id":"63fced7970d81ec2"}
+{"encrypted_b64":"M61DK8j0cQYOQECqj1pb1bM9GONFgsX1KDC9cnreuhg=","password":"5050twin","session_id":"29da39c8236d0f6c"}
+
+
 
 zapis do plikow:
-echo -n 'Ruufpb6GYJkta+jSHB01FeNyp7aB9LeAQW39NGeVwrc=' > zad29.b64
+echo -n 'M61DK8j0cQYOQECqj1pb1bM9GONFgsX1KDC9cnreuhg=' > zad29.b64
 base64 -d zad29.b64 > zad29.enc
-echo -n 'maryjane9' > password
+
+-a w openssl enc <-zamiast tej zabawy z base64 (ale potrafi nie zadzialac)
+
+echo -n 'mM0Hgt2cTWtucCPesskiCdijDxQLAOTxmcOCbRS5ybU' > zad29.enc
+
+
+echo -n '5050twin' > password
+
 
 
 openssl enc -d -aes-256-ecb -in zad29.enc -out zad29.dec -pbkdf2 -nosalt -iter 356 -pass pass:$(cat password)
+
+openssl enc -d -aes-256-ecb -in zad29.enc -out zad29.dec -nosalt -pbkdf2 -iter 356 -pass pass:5050twin
+
+
+curl -X 'POST' \
+  'http://localhost:2009/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "29da39c8236d0f6c",
+  "decrypted_word": "ofi2006"
+}'
+
+
+{
+  "result": "Correct decryption!"
+}
 
 
 zad2.10
