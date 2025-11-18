@@ -1,4 +1,3 @@
-w tej lekcji sa problemy z bcryptem tylko ostatnie zadania
 
 
 zad1
@@ -209,6 +208,8 @@ if __name__ == "__main__":
 ```
 zad9
 #tego nie wiem jak zrobic
+
+nie potrzebne do kolosa/ wiec zostawiam
 
 
 zad10
