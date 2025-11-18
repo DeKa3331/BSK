@@ -381,6 +381,10 @@ analogicznie do 2.11 nie wiem dokonca jak zrobic :(
 
 
 
+2.11 i 2.12 zakodowac jako zmienna $( i powinno zadzialac
+
+
+
 
  
 
