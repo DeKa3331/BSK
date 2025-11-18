@@ -97,7 +97,7 @@ deka@SKH-KUBUNTU:~$ curl -X 'POST' \
 
 
 
-zad47
+zad4.7
 
 crunch minimumZnakow maximumZnakow zCzegoSieSklada
 crunch 3 3 0123456789 -o digits.txt
