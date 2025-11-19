@@ -1,5 +1,4 @@
-w tej lekcji mialem duzo problemow bo z tymi kluczami to wiecej nie dziala niz dziala
-
+WAZNA SPRAWA DO ZAPYTANIA  W ZADANIU 3.5 WYSYLAJAC ZAPYTANIE DO KONSOLI DOSTAJE KLUCZ ALE NIE PRIVATE KOD JA GO WZIALEM Z DOCSOW ZAPYTAC!
 
 zad3.1
 -generuje dwa klucze publiczny i prywatny, aktualnie w pliku mamy tylko prywany:
@@ -34,9 +33,11 @@ curl -X 'POST' \
   -H 'Content-Type: multipart/form-data' \
   -F 'file=@pub.pem;type=application/x-x509-ca-cert'
 
-  prywant klucz upload:
-  curl -X 'POST' \
-
+curl -X 'POST' \
+  'http://127.0.0.1:3001/upload/private' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@priv.pem;type=application/x-x509-ca-cert'
 
 zad3.2
 
@@ -81,7 +82,66 @@ curl -X GET http://127.0.0.1:3004/getprivkey
  zapis do pliku wygenerowanego klucza:
 curl -X GET http://127.0.0.1:3004/getprivkey -o genpriv.pem
 
-zeby sie nie bawic z enterami na koncu:
-jq -r '.private_key_pem' genpriv.pem > priv.pem
-generacja publicznego z tego:
-openssl pkey -in testpriv.pem -pubout -out genpriv.pub
+
+sprawdzenie dlugosc klucza:
+deka@SKH-KUBUNTU:~$ openssl rsa -in genpriv.pem -text -noout | grep "Private-Key"
+Private-Key: (2048 bit, 2 primes)
+
+generacja publicznego:
+openssl pkey -in genpriv.pem -pubout -out public_key.pem
+
+
+curl -X 'POST' \
+  'http://127.0.0.1:3004/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'session_id=c483f0e678457dd5' \
+  -F 'public_key_file=@public_key.pem;type=application/x-x509-ca-cert'
+
+  {
+  "result": "Keys match!"
+}
+
+zad3.5
+
+mozna to tak zrobic tym i skopiowac i zapis do pliku:
+deka@SKH-KUBUNTU:~$ curl -X 'GET' \    
+  'http://127.0.0.1:3005/getprivkey' \
+  -H 'accept: application/octet-stream'
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgpBvOBzeMuW6b5kXi
+DUEDDCTYAsqgKAIDYsrDOd2XDFGhRANCAAR8GkL9FvzfJSwwfmYt7QXzLkjw71KI
+30UlELrijBko+ZS7qRcoQzOg4iExELc4vSKH62gU3vx8ygP/u8qjAMQ8
+-----END PRIVATE KEY-----deka@SKH-KUBUNTU:~$ 
+
+
+
+a ja pobralem plik z docsow i nazywa sie private_key_test
+
+zawartosc wyglada tak:
+-----BEGIN PRIVATE KEY-----
+MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgLLnJuTO9PPF4Ik6E
+2xK92XT0vfaxnFFxYlxH6yyx3wihRANCAAS6bMjaJOP13Ksp0a3HBQ+iMLBhOWJA
+BkpY85oz3EqXQJzGOnGgiewu1mg/ApRGLf6FU4oCeIPDcdgWsfIR/P80
+-----END PRIVATE KEY-----
+
+generowanie klucza:
+openssl ec -in private_key_test.pem -pubout -out ec_pub.pem
+
+
+test:
+
+curl -X 'POST' \
+  'http://127.0.0.1:3005/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'session_id=ca9da28e7adc857b' \
+  -F 'public_key_file=@ec_pub.pem;type=application/x-x509-ca-cert'
+
+
+  {
+  "result": "Keys match!"
+}
+
+
+zad3.6
