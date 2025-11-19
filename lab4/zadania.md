@@ -1,5 +1,7 @@
 WAZNA SPRAWA DO ZAPYTANIA  W ZADANIU 3.5 WYSYLAJAC ZAPYTANIE DO KONSOLI DOSTAJE KLUCZ ALE NIE PRIVATE KOD JA GO WZIALEM Z DOCSOW ZAPYTAC!
 
+w 3.6 np wogole nie generuje sesion_id
+
 zad3.1
 -generuje dwa klucze publiczny i prywatny, aktualnie w pliku mamy tylko prywany:
 openssl genpkey -algorithm RSA -out priv.pem -pkeyopt rsa_keygen_bits:1024
@@ -141,7 +143,25 @@ curl -X 'POST' \
 
   {
   "result": "Keys match!"
+
+
+  zad3.6
+  deka@SKH-KUBUNTU:~$ curl -X 'GET' \
+  'http://localhost:3006/encrypt' \
+  -H 'accept: */*'
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA/u+ptBV/+cwYBfRDa5lw
+GReDtT0pJsTcBqNWU5R/WiyivcY6cvcQKekj+vu8++/KrfA1yNVqK6osZ5QNFvOY
+wrTFF+LIbKKZp6OaNbVUaUjWPhwyhYNrIvx6L9BxURMsCMt4nNjrx7Ab4S6eZMUM
+GmyMeJ9GU/K6b/BfuVqs1GnjHYKEnQEb6J1c9nfb5vtxeJmzySi7KK3h72bpsVat
+iaKU5O61lfgo+k3hbIfHROuOw7vJWjaZVx5HuYjBY9tTGyLwtj68nAlAm7GMJ79U
+t3fiRorObrnyz+KyTiJjlgGiHFg/kq78csZbSS+Itv1MwhGsm8FMHcpaalwujFcg
+TQIDAQAB
+-----END PUBLIC KEY-----
 }
+
+dobra dostaje za malo danych zostawiam to
+
 
 
 zad3.6
