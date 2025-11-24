@@ -130,6 +130,51 @@ curl -X 'POST' \
 {"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "029", "hash": "5c7d5705ab73466c0584cc782cb12d2e"}
 
 
+zad4.9 (blad w poleceniu tam sa 2liczby zamiast 4)
+generacja:
+
+deka@SKH-KUBUNTU:~$ curl -X 'GET'   'http://127.0.0.1:4009/hash'   -H 'accept: application/json'
+{
+  "hash": "0c4f5f8fd16ab0b20a152fab22c3c11c",
+  "message": "Spr\u00f3buj z\u0142ama\u0107 ten hash!"
+}
+
+echo -n 0c4f5f8fd16ab0b20a152fab22c3c11c >hash
+
+tworzenie slownika:
+crunch 8 8 -t pass%% -o slownik49.txt
+Crunch will now generate the following amount of data: 90000 bytes
+0 MB
+0 GB
+0 TB
+0 PB
+Crunch will now generate the following number of lines: 10000 
+
+crunch: 100% completed generating output
+
+
+lamanie z uzyciem slownika i maski: (dlatego -a 3)
+hashcat -m 0 -a 3 hash slownik49.txt
+
+
+(podglad):
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: 0c4f5f8fd1
+
+wyswietlanie zlamanego hasha:
+hashcat -m 0 hash --show
+
+deka@SKH-KUBUNTU:~$ hashcat -m 0 hash --show
+0c4f5f8fd16ab0b20a152fab22c3c11c:pass99
+
+
+
+
+
+
+
 
 zad4.12
 
