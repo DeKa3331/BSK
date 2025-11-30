@@ -64,7 +64,30 @@ curl -X 'POST' \
   "word": "kingsley"
 }'
 
-{"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "kingsley", "hash": "d763fbf7e641f036d7840799eb7ddd8cb167a33b"}d
+{"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "kingsley", "hash": "d763fbf7e641f036d7840799eb7ddd8cb167a33b"}
+
+
+
+zad4.3
+curl -X 'GET' \
+  'http://127.0.0.1:4003/hash' \
+  -H 'accept: application/json'
+
+  {
+  "hash": "0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c",
+  "message": "Spr\u00f3buj z\u0142ama\u0107 ten hash!"
+}
+
+echo -n '0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c'>hash43.txt
+
+ hashcat -m 1400 -a 0 hash43.txt wordlist.txt
+
+poprawnie wiec skip
+
+zad4.4
+ hashcat -m 1700 -a 0 hash44.txt wordlist.txt
+
+
 
 zad4.5
 generacja:
@@ -95,8 +118,23 @@ deka@SKH-KUBUNTU:~$ curl -X 'POST' \
 }'
 {"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "wattere", "hash": "$2b$12$LGOhydY0Vh1oXUZ1kdvN9.2UfiPlF8A2ekVSaFT48X42SBmy2RPIu"}
 
+zad4.6
 
-
+echo -n 'SCRYPT:1024:1:1:11NVfz2YM//PS/fwvEvHXw==:5/+1x4C7w8ucH6s+0PXzW2dlCfTzMOYURRkEmhjeXlk=' >hash44.txt
+ hashcat -m 8900 -a 0 hash44.txt wordlist.txt
+                                                
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 8900 (scrypt)
+Hash.Target......: SCRYPT:1024:1:1:11NVfz2YM//PS/fwvEvHXw==:5/+1x4C7w8...jeXlk=
+Time.Started.....: Sun Nov 30 19:42:11 2025 (2 secs)
+Time.Estimated...: Sun Nov 30 19:42:13 2025 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (wordlist.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:       22 H/s (0.33ms) @ Accel:16 Loops:1024 Thr:1 Vec:1
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 32/50 (6
 zad4.7
 
 crunch minimumZnakow maximumZnakow zCzegoSieSklada
