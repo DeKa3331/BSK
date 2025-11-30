@@ -1,6 +1,12 @@
 slowniki musza byc w /home nigdzie indziej inaczej nie zadziala! w tym samym pliku.
 hashcat --help po numerek
 
+,	WIELKIE litery
+@	małe litery
+%	cyfry
+^	znaki specjalne
+
+
 zad4.1
 tworzenie:
 curl -X 'GET' \
@@ -168,6 +174,22 @@ curl -X 'POST' \
 {"success": true, "message": "Gratulacje! Poprawnie złamano hash!", "word": "029", "hash": "5c7d5705ab73466c0584cc782cb12d2e"}
 
 
+zad4.8
+
+echo -n 'f322989d01b7600a3ae2a3b3a45b22c8' > hash48.txt
+
+
+crunch 4 4 ABCDEFGHIJKLMNOPQRSTUVWXYZ > wordlist.txt
+
+hashcat -m 0 -a 0 hash.txt wordlist.txt
+
+                                      
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD5)
+Hash.Target......: f322989
+
+
 zad4.9 (blad w poleceniu tam sa 2liczby zamiast 4)
 generacja:
 
@@ -209,9 +231,29 @@ deka@SKH-KUBUNTU:~$ hashcat -m 0 hash --show
 
 
 
+zad4.10
+echo -n 'bb0f7e021d52a4e31613d463fc0525d8' >hash410.txt
+
+generacja z permutacji:
+crunch 1 1 -p admin password 123 > wordlist.txt
+
+ hashcat -m 0 -a 0 hash410.txt wordlist.txt
 
 
+bb0f7e021d52a4e31613d463fc0525d8:adminpassword123         
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 0 (MD
 
+zad4.11
+
+crunch 5 5 -t ,@%^^ -o wordlist.txt
+
+
+echo -n '23f734bbf3744e2ad797bf6071afaae0' >hash411.txt
+
+ hashcat -m 0 -a 0 hash411.txt wordlist.txt
 
 
 zad4.12
@@ -313,7 +355,16 @@ curl -X 'POST' \
 
 
 zad4.15
-TBD
+echo -n '09408778b720080d6c1024362c49ec8ae2b8b23f' >hash415.txt
+
+hashcat -m 100 -a 3 hash415.txt -1 0123456789abcdef '00:14:22:ff:ff:?1?1
+
+
+                                   
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SH
+
 zad4.16
 curl -X 'GET' \
   'http://127.0.0.1:4016/hash' \
@@ -353,8 +404,146 @@ curl -X 'POST' \
 zad4.17
  echo -n 'b877e59a00217961b92230e39e131250de2e44b7d3e7ceeae95a0d858b6b652d' >hash417.txt
 
+ hashcat -m 0 -a 7 hash.txt top10.txt -1 '!@#$%&*' '?l?d?1'
 
-TBD, koniec zajec
+zad4.18
+nano imiona_zenskie.txt
+
+wpisuje
+
+Anna
+Alicja
+Natalia
+Eliza
+Kinga
+Karolina
+Nela
+Monika
+Martyna
+Agnieszka
+
+plik z zasadami:
+nano leet.rule
+
+sa@
+se3
+si1
+
+s a @ → zamień a na @
+
+s e 3 → zamień e na 3
+
+s i 1 → zamień i na 1
+
+hashcat -m 100 -a 0 hash.txt imiona_zenskie.txt -r leet.rule
+
+jezeli chcielisbysmy dodawac wiecej zasad to mozemy tak: -r rules/best64.rule -r leet.rule
+
+
+zad4.19
+tak smao jak wyzej ale plik z zasadami wyglada tak:
+
+sa4
+se3
+so0
+$_
+$2
+$0
+$2
+$5
+$!
+
+
+sa4	a → 4
+se3	e → 3
+so0	o → 0
+$_	dodaje _
+$2	dodaje 2
+$0	dodaje 0
+$2	dodaje 2
+$5	dodaje 5
+$!	dodaje !
+
+zad4.20
+
+^!
+$#
+| Reguła | Działanie              |
+| ------ | ---------------------- |
+| `^!`   | dodaje `!` na początku |
+| `$#`   | dodaje `#` na końcu    |
+
+przypomniam schemat uzycia:
+hashcat -m 0 -a 0 hash.txt cert.txt -r cert.rule
+
+
+
+zad4.21
+fcrackzip -u -D -p wordlist.txt secure.zip
+-u – sprawdza poprawność hasła
+
+-D – tryb słownikowy
+
+-p – plik ze słownikiem
+
+unzip secure.zip
+
+
+
+. zip2john + hashcat
+Krok 1 – wyciągnij hash z ZIP-a
+zip2john secure.zip > zip_hash.txt
+
+Krok 2 – uruchom hashcat
+
+Tryb ZIP (najczęściej):
+
+hashcat -m 13600 -a 0 zip_hash.txt wordlist.txt
+
+
+Jeśli to starszy zip:
+
+hashcat -m 17200 -a 0 zip_hash.txt wordlist.txt
+
+
+Kiedy hasło zostanie znalezione – rozpakuj:
+
+unzip secure.zip
+
+zad4.22
+zip2john challenge.zip > zip_hash.txt
+crunch 5 6 0123456789 -o słownik.txt
+
+to co mi zadzialalo:
+
+fcrackzip -b -c 1 -l 5-6 -u challenge.zip
+
+-b ->brute force
+-c ->cyfry
+-l ->dlugosc 5 do 6
+-u ->weryfikacja przed wyswietleniem
+4.23
+potrzebuje slownik np:
+crunch 11 11 92070100000 92123199999 -o pesel.txt
+
+pdfcrack -w pesel.txt challenge.pdf
+
+
+
+
+
+
+5cyfr:
+hashcat -m 13600 -a 3 zip_hash.txt ?d?d?d?d?d
+6cyfr:
+hashcat -m 13600 -a 3 zip_hash.txt ?d?d?d?d?d?d
+
+hashcat -m 13600 -a 3 zip_hash.txt ?d?d?d?d?d,?d?d?d?d?d?d
+
+unzip secure.zip
+
+
+
 
 
 
