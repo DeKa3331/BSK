@@ -375,9 +375,6 @@ curl -X POST "http://localhost:5004/submit" -H  "accept: application/json" -H  "
 zad5.5
 
 
-
-
-
 curl -X GET "http://localhost:5005/encrypt" -H  "accept: application/json"{
   "session_id": "b847500304f1788e9c992f4969415fdd",
   "word_to_encrypt": "celtics",
@@ -521,6 +518,7 @@ curl -X POST "http://localhost:5008/submit" -H  "accept: application/json" -H  "
   "signer": "Sign Challenge <sign@example.com>",
   "signature_valid": true
 }
+  zad5.9
   
 
 
