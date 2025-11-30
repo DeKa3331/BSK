@@ -291,14 +291,11 @@ losowe slowo:
 echo -n 'mojeslowo' > plaintext.txt
 
 zaszyfrowanie:
-openssl pkeyutl -encrypt -pubin -in plaintext.txt -inkey public.pem -pkeyopt rsa_padding_mode:oaep -out encrypted.bin
+openssl pkeyutl -encrypt -pubin -in plaintext.txt -inkey pub.pem -pkeyopt rsa_padding_mode:oaep -out encrypted.bin
 
 
 zakodowanie:
 base64 encrypted.bin > ciphertext.txt
-
-base64 -w 0 encrypted.bin > ciphertext.txt
-
 
 deka@SKH-KUBUNTU:~$ curl -X 'POST' \
   'http://127.0.0.1:3008/decrypt' \
@@ -308,11 +305,157 @@ deka@SKH-KUBUNTU:~$ curl -X 'POST' \
   -F 'public_key=@pub.pem;type=application/x-x509-ca-cert' \
   -F 'plaintext=@plaintext.txt;type=text/plain' \
   -F 'ciphertext=@ciphertext.txt;type=text/plain'
-{"error":"Ciphertext with incorrect length.","keys_match":true,"result":"decryption_failed"}
+
+
+{"decrypted":"mojeslowo","keys_match":true,"plaintext_match":true,"result":"ok"}
+
+
+zad3.9
+
+curl -i 'GET' \
+  'http://localhost:3009/sign' \
+  -H 'accept: application/x-pem-file'
+
+
+  
+Server: Werkzeug/3.1.3 Python/3.10.19
+Date: Sun, 30 Nov 2025 17:34:29 GMT
+Content-Disposition: attachment; filename=private_key.pem
+X-Session-Id: LcXZcBoM29tnGQyme1od4w
+X-Word: lindsey99
+Content-Type: application/x-pem-file
+Content-Length: 1674
+Access-Control-Allow-Origin: *
+Connection: close
+
+
+echo -n 'lindsey99' > word.txt
+
+openssl dgst -sha256 -binary -out word.sha256 word.txt
 
 
 
 
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAsw3TuVYaMS7teYgKJqiLRo6UEBr/8RT3Yr4e5uMzPunhjx+7
+fi9MXGHY4ymneaUvFWMkJLVpz+d+RRJZOlC46AQaqDB4UkPzBtEYH2+gHdUb9of1
+bLyvymUIIwEdQi/QNm0YC/2Vn82wnzRIztmytW47CboMRSsxuwTZXyM8JJXRbEwX
+WEzgpFts0Wn8wI0VCmxF8oG80lUtUfjjiZr9O4VDrgatDkEIVnTn/34OSrYvEFWR
+VghptS/Gq80ARnEvP5kJB5bmL61ruO1w8guhurjygzynNtYTCT0v2v+ix3BtRerw
+gIrEsEbE77bWjO7MfaGgu3leSAiycteSTsz8QQIDAQABAoIBAAJoYokh1E6GUc4g
+OTj4q+4JDnqWltvNySd3PJaUrj6Trf9W/R4s3hY5UH2aRKLMGOFk9s5NsFZ556i/
+jtKr9YcU8Ev0Aieyy0erh9NLJLJHAIIqxQ8TLNrcG8FO/18BoidbtWK6pFSYszX6
+WbrqmnKiML38VgQ3eOLRtXe4E0vPgEl1kx9gBJrv+MKGudPoAlQZUqXnEqyRhC3O
+nhXX4XXcKFM26biww6AfzwDbpeESIPqJnqr/e0frFKqYPJRwtyrTD+7aVCtA0x12
+h/HDhIC7zcq7PEqYOkzkxuhBUBgICXkSdFRzVgllyaRruCrSIiT+HXFuMc2T7wbL
+A++PdKECgYEAxXfmZoc7XHQWB3c2770jjkO86jd4fssYj/eWZjCZksRVfx13qCLY
+DG4JjE5uGLB6uROl56ezYcl5249Ngy4cHt99U0C8txLmGRga8744VIOrVF23INhb
+/dnHDmXO9PbLRy3CbW7fZ2LDuq/5wR2SZFnL7VfFV6u8+W+6Lz2TW2ECgYEA6CCg
+rALRmNN3M86PuNV0MCcSxzC8n1hvljAGF4HiF2FSC8C4JEDA79AAWX3pNd9dmxpQ
+fK9ZznX3vk6uMCWCTZxq1D0q4N26D+xn8aEF3l3z6VFZi8GN6WVJsI7qesoGmLkX
+LMI6SZBECdD1VK06l+gQga0HdrRWXiRj+OG1LOECgYAChNkHjcoQD9sIFVk6Daua
+cPrD8hkzZNvXWk0s2Inc+Wwtxu5z0p326qBsjcORxQ6Ltdhz8Au1v6AyUM2oUrpB
+GpC6syS1ISSWRVxyp4aIbXWOCfQAE0J5JoIHiPzu2wcUzVyhkLyA0R22D/Cbqgjo
+Bs03Jdt6ltI+TFKPr7VlgQKBgBEDCyNwFXJQ1SSb19ag9iHtSygD/17iOVNVc6zX
+XP1/qWapGhW2FS2+HbhxTN0g4JhUZl+s7jT+Wki9NXDb3t/XPdEOJo1SUqeGGNwR
+g/+W/SA1UQ24ArF/NdZVswOKuM8KiZNDLMhlZUce5EvvYiLt4//M8YYWk1nU6uq7
+h+6hAoGAbQvKYZbYMYJ89E78v/4N2aX2Go/uHmP51Uoz6wrUrExItdZeVgkw+8k9
+dp11cWR01c1j4z8D4gj77xU+zuuitgjU4pAYzn2EMhnKEikGkriVPUqhFzphsx4T
+mPVrOIFq4vBT1mJi5wN6Rc2b9PERXQz7Y+mFB7urf+c6fLDE+6o=
+-----END RSA PRIVATE KEY-----
+
+
+echo -n '-----BEGIN RSA PRIVATE KEY-----
+MIIEogIBAAKCAQEAsw3TuVYaMS7teYgKJqiLRo6UEBr/8RT3Yr4e5uMzPunhjx+7
+fi9MXGHY4ymneaUvFWMkJLVpz+d+RRJZOlC46AQaqDB4UkPzBtEYH2+gHdUb9of1
+bLyvymUIIwEdQi/QNm0YC/2Vn82wnzRIztmytW47CboMRSsxuwTZXyM8JJXRbEwX
+WEzgpFts0Wn8wI0VCmxF8oG80lUtUfjjiZr9O4VDrgatDkEIVnTn/34OSrYvEFWR
+VghptS/Gq80ARnEvP5kJB5bmL61ruO1w8guhurjygzynNtYTCT0v2v+ix3BtRerw
+gIrEsEbE77bWjO7MfaGgu3leSAiycteSTsz8QQIDAQABAoIBAAJoYokh1E6GUc4g
+OTj4q+4JDnqWltvNySd3PJaUrj6Trf9W/R4s3hY5UH2aRKLMGOFk9s5NsFZ556i/
+jtKr9YcU8Ev0Aieyy0erh9NLJLJHAIIqxQ8TLNrcG8FO/18BoidbtWK6pFSYszX6
+WbrqmnKiML38VgQ3eOLRtXe4E0vPgEl1kx9gBJrv+MKGudPoAlQZUqXnEqyRhC3O
+nhXX4XXcKFM26biww6AfzwDbpeESIPqJnqr/e0frFKqYPJRwtyrTD+7aVCtA0x12
+h/HDhIC7zcq7PEqYOkzkxuhBUBgICXkSdFRzVgllyaRruCrSIiT+HXFuMc2T7wbL
+A++PdKECgYEAxXfmZoc7XHQWB3c2770jjkO86jd4fssYj/eWZjCZksRVfx13qCLY
+DG4JjE5uGLB6uROl56ezYcl5249Ngy4cHt99U0C8txLmGRga8744VIOrVF23INhb
+/dnHDmXO9PbLRy3CbW7fZ2LDuq/5wR2SZFnL7VfFV6u8+W+6Lz2TW2ECgYEA6CCg
+rALRmNN3M86PuNV0MCcSxzC8n1hvljAGF4HiF2FSC8C4JEDA79AAWX3pNd9dmxpQ
+fK9ZznX3vk6uMCWCTZxq1D0q4N26D+xn8aEF3l3z6VFZi8GN6WVJsI7qesoGmLkX
+LMI6SZBECdD1VK06l+gQga0HdrRWXiRj+OG1LOECgYAChNkHjcoQD9sIFVk6Daua
+cPrD8hkzZNvXWk0s2Inc+Wwtxu5z0p326qBsjcORxQ6Ltdhz8Au1v6AyUM2oUrpB
+GpC6syS1ISSWRVxyp4aIbXWOCfQAE0J5JoIHiPzu2wcUzVyhkLyA0R22D/Cbqgjo
+Bs03Jdt6ltI+TFKPr7VlgQKBgBEDCyNwFXJQ1SSb19ag9iHtSygD/17iOVNVc6zX
+XP1/qWapGhW2FS2+HbhxTN0g4JhUZl+s7jT+Wki9NXDb3t/XPdEOJo1SUqeGGNwR
+g/+W/SA1UQ24ArF/NdZVswOKuM8KiZNDLMhlZUce5EvvYiLt4//M8YYWk1nU6uq7
+h+6hAoGAbQvKYZbYMYJ89E78v/4N2aX2Go/uHmP51Uoz6wrUrExItdZeVgkw+8k9
+dp11cWR01c1j4z8D4gj77xU+zuuitgjU4pAYzn2EMhnKEikGkriVPUqhFzphsx4T
+mPVrOIFq4vBT1mJi5wN6Rc2b9PERXQz7Y+mFB7urf+c6fLDE+6o=
+-----END RSA PRIVATE KEY-----' > priv.pem
+
+
+
+
+podpisywanie:
+
+openssl pkeyutl -sign -in word.sha256 -inkey priv.pem \
+    -pkeyopt digest:sha256 \
+    -pkeyopt rsa_padding_mode:pss \
+    -pkeyopt rsa_pss_saltlen:32 \
+    -out signature.bin
+
+zamiana na base64:
+    base64 signature.bin > signature.b64
+
+wysylanie:
+    curl -X 'POST' \
+  'http://localhost:3009/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'session_id=LcXZcBoM29tnGQyme1od4w' \
+  -F 'signature_b64=@signature.b64'
+
+{
+  "result": "Correct signature!"
+}
+
+zad3.10
+
+curl -i 'GET' \
+  'http://localhost:3010/verify' \
+  -H 'accept: application/zip' -o zadania.zip
+
+  unzip zadania.zip
+
+  echo -n 'pineapple' >word.txt
+
+  base64 -d signature.b64 > signature.bin
+
+  
+
+nie dziala mi ten verify:
+
+openssl dgst -sha256 -verify public_key.pem -sigopt rsa_padding_mode:pss -sigopt rsa_pss_saltlen:32 -signature signature.bin word.txt
+
+
+ale tak by wygladal submit:
+  curl -X 'POST' \
+  'http://localhost:3010/submit' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'session_id=gAnDrSfVteCJYLtRNlYglg' \
+  -F 'word=cherry' \
+  -F 'public_key_pem=@public_key.pem;type=application/x-x509-ca-cert' \
+  -F 'signature_b64=@signature.b64' \
+  -F 'user_verified=false'
+
+  ale moze to nie mialo przejsc? bo wtedy user_verified=false i dziala?
+
+
+  
+
+  
 
 
 
