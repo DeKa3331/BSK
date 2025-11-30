@@ -1,6 +1,4 @@
-WAZNA SPRAWA DO ZAPYTANIA  W ZADANIU 3.5 WYSYLAJAC ZAPYTANIE DO KONSOLI DOSTAJE KLUCZ ALE NIE PRIVATE KOD JA GO WZIALEM Z DOCSOW ZAPYTAC!
 
-w 3.6 np wogole nie generuje sesion_id
 
 zad3.1
 -generuje dwa klucze publiczny i prywatny, aktualnie w pliku mamy tylko prywany:
@@ -228,6 +226,61 @@ curl -X 'POST' \
 {"result":"Correct encryption!"}
 
 zad3.7
+
+pobieranie danych:
+
+  curl -i 'GET' \
+  'http://127.0.0.1:3007/decrypt' \
+  -H 'accept: */*'
+
+  curl: (6) Could not resolve host: GET
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.3 Python/3.10.19
+Date: Sun, 30 Nov 2025 15:18:57 GMT
+Content-Disposition: attachment; filename=encrypted_and_key.zip
+Content-Type: application/zip
+Content-Length: 4156
+Cache-Control: no-cache
+Date: Sun, 30 Nov 2025 15:18:57 GMT
+X-Session-Id: fedf2c6c4044db66
+Access-Control-Allow-Origin: *
+Connection: close
+
+Warning: Binary output can mess up your terminal. Use "--output -" to tell 
+Warning: curl to output it to your terminal anyway, or consider "--output 
+Warning: <FILE>" to save to a file.
+
+
+jak widac tutaj jest problem ale to dlatego ze dostaje zipa 
+
+wiec moge sobie to zapisac odrazu do zipa o tak:
+
+  curl http://127.0.0.1:3007/decrypt -o dane.zip
+
+WAZNE
+**  unzip dane.zip**
+
+openssl pkeyutl -decrypt -inkey private_key.pem -in <(base64 -d encrypted.txt) -pkeyopt rsa_padding_mode:oaep -out decrypted.txt
+
+deka@SKH-KUBUNTU:~$ openssl pkeyutl -decrypt -inkey private_key.pem -in <(base64 -d encrypted.txt) -pkeyopt rsa_padding_mode:oaep -out decrypted.txt
+deka@SKH-KUBUNTU:~$ cat decrypted.txt
+bonita4
+
+i wysylanie do serwera:
+
+curl -X 'POST' \
+  'http://127.0.0.1:3007/submit' \
+  -H 'accept: */*' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "session_id": "fedf2c6c4044db66",
+  "decrypted_word": "bonita4"
+}'
+
+
+
+
+
 
 
 
