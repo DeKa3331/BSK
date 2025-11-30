@@ -203,6 +203,7 @@ echo -n "rocking" > word.txt
 
 
 
+szyfrowanie:
 
 echo -n "rocking" | openssl pkeyutl -encrypt -pubin -inkey public.pem -pkeyopt rsa_padding_mode:oaep -out encrypted.bin
 
@@ -276,6 +277,42 @@ curl -X 'POST' \
   "session_id": "fedf2c6c4044db66",
   "decrypted_word": "bonita4"
 }'
+
+zad3.8
+
+generacja klucza:
+openssl genpkey -algorithm RSA -out priv.pem -pkeyopt rsa_keygen_bits:1024
+
+generacja publicznego na podstawie wczesniejszego prywatnego:
+openssl pkey -in priv.pem -pubout -out pub.pem
+
+losowe slowo:
+
+echo -n 'mojeslowo' > plaintext.txt
+
+zaszyfrowanie:
+openssl pkeyutl -encrypt -pubin -in plaintext.txt -inkey public.pem -pkeyopt rsa_padding_mode:oaep -out encrypted.bin
+
+
+zakodowanie:
+base64 encrypted.bin > ciphertext.txt
+
+base64 -w 0 encrypted.bin > ciphertext.txt
+
+
+deka@SKH-KUBUNTU:~$ curl -X 'POST' \
+  'http://127.0.0.1:3008/decrypt' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'private_key=@priv.pem;type=application/x-x509-ca-cert' \
+  -F 'public_key=@pub.pem;type=application/x-x509-ca-cert' \
+  -F 'plaintext=@plaintext.txt;type=text/plain' \
+  -F 'ciphertext=@ciphertext.txt;type=text/plain'
+{"error":"Ciphertext with incorrect length.","keys_match":true,"result":"decryption_failed"}
+
+
+
+
 
 
 
