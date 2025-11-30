@@ -146,22 +146,88 @@ curl -X 'POST' \
 
 
   zad3.6
-  deka@SKH-KUBUNTU:~$ curl -X 'GET' \
-  'http://localhost:3006/encrypt' \
-  -H 'accept: */*'
+ curl -i 'GET'   'http://localhost:3006/encrypt'   -H 'accept: */*'
+curl: (6) Could not resolve host: GET
+HTTP/1.1 200 OK
+Server: Werkzeug/3.1.3 Python/3.10.19
+Date: Sun, 30 Nov 2025 14:52:01 GMT
+Content-Disposition: attachment; filename=public_key_V8ZMYTjZRF4.pem
+Content-Type: application/octet-stream
+Content-Length: 450
+Cache-Control: no-cache
+Date: Sun, 30 Nov 2025 14:52:01 GMT
+X-Session-ID: V8ZMYTjZRF4
+X-Word: rocking
+Access-Control-Allow-Origin: *
+Connection: close
+
 -----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA/u+ptBV/+cwYBfRDa5lw
-GReDtT0pJsTcBqNWU5R/WiyivcY6cvcQKekj+vu8++/KrfA1yNVqK6osZ5QNFvOY
-wrTFF+LIbKKZp6OaNbVUaUjWPhwyhYNrIvx6L9BxURMsCMt4nNjrx7Ab4S6eZMUM
-GmyMeJ9GU/K6b/BfuVqs1GnjHYKEnQEb6J1c9nfb5vtxeJmzySi7KK3h72bpsVat
-iaKU5O61lfgo+k3hbIfHROuOw7vJWjaZVx5HuYjBY9tTGyLwtj68nAlAm7GMJ79U
-t3fiRorObrnyz+KyTiJjlgGiHFg/kq78csZbSS+Itv1MwhGsm8FMHcpaalwujFcg
-TQIDAQAB
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+zxUsCtxUZ0IaxBQj595
+HEFcrRduzgExRnQoYIRYjiY7qIeMGFi1dHnzXrB4x0fJKiXS+cKSfplfkCLzfyhy
+Po/tahAbB1X+aRaYzs7kkQjzMvx8Z3u6+AnVAdPh3hoIESpcSXTtviR+6CvRpuA/
+t3X4LfnPRAlTAvvsIzJGpoX8bb5reIYOBCn52IpA5YJfCk2Zh/iS4B+qo/bRm/YB
+cEtvJljrVv+/pMezXK96HflTIBEV9s7/Lq1WEcS8F9JQAEkHqS3gSK6PP6Z5navD
+pMK4GbBbB4Y+6VhuKepy/fy2h9osxCDN4u5A8+BrVf5zZNn+3VA+gqKgd2IuHMVB
+bwIDAQAB
 -----END PUBLIC KEY-----
-}
 
-dobra dostaje za malo danych zostawiam to
+zapisuje klucz do pliku
+
+echo -n '-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+zxUsCtxUZ0IaxBQj595
+HEFcrRduzgExRnQoYIRYjiY7qIeMGFi1dHnzXrB4x0fJKiXS+cKSfplfkCLzfyhy
+Po/tahAbB1X+aRaYzs7kkQjzMvx8Z3u6+AnVAdPh3hoIESpcSXTtviR+6CvRpuA/
+t3X4LfnPRAlTAvvsIzJGpoX8bb5reIYOBCn52IpA5YJfCk2Zh/iS4B+qo/bRm/YB
+cEtvJljrVv+/pMezXK96HflTIBEV9s7/Lq1WEcS8F9JQAEkHqS3gSK6PP6Z5navD
+pMK4GbBbB4Y+6VhuKepy/fy2h9osxCDN4u5A8+BrVf5zZNn+3VA+gqKgd2IuHMVB
+bwIDAQAB
+-----END PUBLIC KEY-----' >public.pem
+
+
+jakby byl problem na kolokwium to gpt mowi zeby zwrocic to tak:
+
+```
+cat > public.pem << EOF
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA+zxUsCtxUZ0IaxBQj595
+HEFcrRduzgExRnQoYIRYjiY7qIeMGFi1dHnzXrB4x0fJKiXS+cKSfplfkCLzfyhy
+Po/tahAbB1X+aRaYzs7kkQjzMvx8Z3u6+AnVAdPh3hoIESpcSXTtviR+6CvRpuA/
+t3X4LfnPRAlTAvvsIzJGpoX8bb5reIYOBCn52IpA5YJfCk2Zh/iS4B+qo/bRm/YB
+cEtvJljrVv+/pMezXK96HflTIBEV9s7/Lq1WEcS8F9JQAEkHqS3gSK6PP6Z5navD
+pMK4GbBbB4Y+6VhuKepy/fy2h9osxCDN4u5A8+BrVf5zZNn+3VA+gqKgd2IuHMVB
+bwIDAQAB
+-----END PUBLIC KEY-----
+EOF
+```
+
+zapis wyrazu z naglowka:
+echo -n "rocking" > word.txt
 
 
 
-zad3.6
+
+echo -n "rocking" | openssl pkeyutl -encrypt -pubin -inkey public.pem -pkeyopt rsa_padding_mode:oaep -out encrypted.bin
+
+
+
+deka@SKH-KUBUNTU:~$ cat encrypted.bin
+�x�▒��@2#��#T����^Q*+_�-��8��ǽB.N���������X���%��
+                                                 ��
+����gmɿM��M#�1�ۙ����^��}#L7A���{��ū�`����C��        ��Ւ|��=m�E�
+                                 �k�(̉
+                                     ��H�EO����1��lI�^�B��▒2��y):��e���\6�X��@�~�*      X�0�T5y���!�E▒v
+^�-���
+
+
+a tak naprawde na kolosa wystarczy:
+curl -X 'POST' \
+  'http://localhost:3006/submit' \
+  -H 'accept: application/json' \
+  -F 'session_id=V8ZMYTjZRF4' \
+  -F 'encrypted_file=@encrypted.bin'
+{"result":"Correct encryption!"}
+
+zad3.7
+
+
+
