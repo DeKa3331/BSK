@@ -519,7 +519,152 @@ curl -X POST "http://localhost:5008/submit" -H  "accept: application/json" -H  "
   "signature_valid": true
 }
   zad5.9
+
+  najpierw musze zaimportowac klucze:
+
+  gpg --import private_key.asc
+   gpg --import public_key.asc
   
+
+
+  tworzenie popdisu Uzywamy id ktore sie utworzylo gpg --list-secret-keys
+:
+  gpg --detach-sign -u 1B2D286EDA34E433066A14070DDD6F4E500112E9 word.txt
+# Tworzy word.txt.sig
+test:
+
+curl -X POST "http://127.0.0.1:5009/submit" \
+  -H "accept: application/json" \
+  -F "session_id=db0fbb134db303c3fb4df073b95615c7" \
+  -F "original_file=@word.txt" \
+  -F "signature_file=@word.txt.sig"
+
+
+
+
+    "status": "success",
+  "message": "📎 Gratulacje! Poprawnie utworzyłeś oddzielny podpis!",
+  "word": "discovery",
+  "signer": "Detach Sign Challenge <detach@example.com>",
+  "signature_valid": true,
+  "signature_type": "detached"
+
+
+zad5.10
+roznica jest taka ze uzywamy 
+--clearsign zamiast --detach-sign 
+
+gpg --clearsign -u 1B2D286EDA34E433066A14070DDD6F4E500112E9 word.txt
+
+zad5.11
+  pobieram zip rozpakowywuje a nastepnie:
+importuje:
+  gpg --import public_key.asc
+gpg: key C313570A546663ED: public key "Kirkland <KIRKLAND@secure.com>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+
+weryfikacja:
+
+deka@SKH-KUBUNTU:~$ gpg --verify word.txt.gpg
+gpg: Signature made pon, 1 gru 2025, 01:42:23 CET
+gpg:                using RSA key 73EF2DC5BE23FEB130DF708FC313570A546663ED
+gpg: Good signature from "Kirkland <KIRKLAND@secure.com>" [unknown]
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+Primary key fingerprint: 73EF 2DC5 BE23 FEB1 30DF  708F C313 570A 5466 63ED
+
+
+curl -X POST "http://127.0.0.1:5011/verify" \
+  -H "accept: application/json" \
+  -F "session_id=02775d76c2f929804819f76051673c7a" \
+  -F "signer_email=KIRKLAND@secure.com" \
+
+  {
+  "status": "success",
+  "message": "🔍 Gratulacje! Poprawnie zweryfikowałeś podpis i zidentyfikowałeś podpisującego!",
+  "signer_email": "KIRKLAND@secure.com",
+  "word": "LAWRENCE",
+  "note": "Udowodniłeś że potrafisz zweryfikować podpis GPG i wydobyć informacje o podpisującym"
+
+
+
+zad5.12
+jest takie samo?
+
+zad5.13
+to samo tylko inne rozszerzenie przy wyrazie
+
+5.14
+
+gpg --output signed_key.asc --sign server_key.asc
+
+gpg --verify signed_key.asc
+gpg: Signature made pon, 1 gru 2025, 01:53:36 CET
+gpg:                using RSA key C1993C8FFA793A91B21B5B36067FBC2603B2D56B
+gpg: Good signature from "jakub (none) <jakub@test.pl>" [ultimate]
+
+
+5.15
+gpg --list-keys
+5.16
+gpg --full-generate-key
+
+
+gpg --full-generate-key
+gpg (GnuPG) 2.2.40; Copyright (C) 2022 g10 Code GmbH
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+
+Please select what kind of key you want:
+   (1) RSA and RSA (default)
+   (2) DSA and Elgamal
+   (3) DSA (sign only)
+   (4) RSA (sign only)
+  (14) Existing key from card
+Your selection? 1
+RSA keys may be between 1024 and 4096 bits long.
+What keysize do you want? (3072) 1024
+Requested keysize is 1024 bits
+Please specify how long the key should be valid.
+         0 = key does not expire
+      <n>  = key expires in n days
+      <n>w = key expires in n weeks
+      <n>m = key expires in n months
+      <n>y = key expires in n years
+Key is valid for? (0) 0
+Key does not expire at all
+Is this correct? (y/N) y
+
+GnuPG needs to construct a user ID to identify your key.
+
+Real name: Jakub
+Email address: test@test.pl
+Comment: no
+You selected this USER-ID:
+    "Jakub (no) <test@test.pl>"
+
+Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? O
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+We need to generate a lot of random bytes. It is a good idea to perform
+some other action (type on the keyboard, move the mouse, utilize the
+disks) during the prime generation; this gives the random number
+generator a better chance to gain enough entropy.
+gpg: revocation certificate stored as '/home/deka/.gnupg/openpgp-revocs.d/CDC7159EE176A2BE4B9C7DD581B6BAE5C6302334.rev'
+public and secret key created and signed.
+
+pub   rsa1024 2025-12-01 [SC]
+      CDC7159EE176A2BE4B9C7DD581B6BAE5C6302334
+uid                      Jakub (no) <test@test.pl>
+sub   rsa1024 2025-12-01 [E]
+
+
+
+gpg --delete-secret-and-public-key CDC7159EE176A2BE4B9C7DD581B6BAE5C6302334
+
 
 
 
