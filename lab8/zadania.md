@@ -318,6 +318,152 @@ zad6.4
 
 
 
+zad6.5
+uruchomienie:
+sudo docker run -p 8447:443 --name tls6 docker.io/mazurkatarzyna/tls-ex6:latest
+
+pobiereanie pliku:
+curl http://127.0.0.1:8447/cert -o cert.pem
+
+
+wyodrebnienie klucza:
+openssl x509 -in cert.pem -pubkey -noout > publicziny_key.pem
+
+
+
+curl -X POST -F "public_key=@publicziny_key.pem" http://127.0.0.1:8447/public
+
+
+kiedy wygasa:
+openssl x509 -in cert.pem -noout -enddate
+notAfter=Jul 29 10:02:41 2026 GMT
+
+wystawiony:
+openssl x509 -in cert.pem -noout -startdate
+notBefore=Dec  8 10:02:41 2025 GMT
+
+albo w skrocie
+openssl x509 -in cert.pem -noout -dates
+i samodizelnie rozdzelic
+
+wydawca:
+openssl x509 -in cert.pem -noout -issuer
+issuer=CN = IdenTrust Authority, O = IdenTrust, C = PL
+deka@SKH-KUBUNTU:~$ 
+
+algorytm i rozmiar:
+openssl x509 -in cert.pem -text -noout | grep "Public Key Algorithm"
+Public Key Algorithm: rsaEncryption
+               
+
+rozmiar:
+openssl x509 -in cert.pem -text -noout | grep "Public-Key"
+Public-Key: (4096 bit)
+
+glowna domena:
+openssl x509 -in cert.pem -noout -subject
+subject=CN = api233.pl, O = Org 740, C = PL
+
+alternatywne:
+openssl x509 -in cert.pem -ext subjectAltName -noout
+X509v3 Subject Alternative Name: 
+    DNS:api233.pl, DNS:secure672.pl, DNS:secure929.io, DNS:secure796.net
+
+uzycie:
+openssl x509 -in cert.pem -ext keyUsage -noout
+X509v3 Key Usage: critical
+    Digital Signature, Key Encipherment
+
+alternatywne uzycie:
+openssl x509 -in cert.pem -ext extendedKeyUsage -noout
+X509v3 Extended Key Usage: critical
+    TLS Web Server Authentication
+
+
+
+curl -X POST "http://127.0.0.1:8447/validate" \
+-H "accept: application/json" \
+-H "Content-Type: application/json" \
+-d '{
+  "expiry_date": "Jul 29 10:02:41 2026 GMT",
+  "issued_date": "Dec  8 10:02:41 2025 GMT",
+  "issuer": "CN = IdenTrust Authority, O = IdenTrust, C = PL",
+  "key_algorithm": "rsa",
+  "key_size": 4096,
+  "key_usage": [
+    "Digital Signature",
+    "key encipherment"
+  ],
+  "primary_domain": "api233.pl",
+  "san_domains": [
+    "api233.pl",
+    "secure672.pl",
+    "secure929.io",
+    "secure796.net"
+  ]
+}'
+
+
+WYNIK 100%:
+
+{
+  "percentage": "100%",
+  "results": {
+    "dates": {
+      "correct": true,
+      "your_expiry": "Jul 29 10:02:41 2026 GMT",
+      "your_issued": "Dec  8 10:02:41 2025 GMT"
+    },
+    "issuer": {
+      "correct": true,
+      "expected": "IdenTrust Authority",
+      "your_answer": "CN = IdenTrust Authority, O = IdenTrust, C = PL"
+    },
+    "key_info": {
+      "correct": true,
+      "your_algorithm": "RSA",
+      "your_key_size": "4096"
+    },
+    "key_usage": {
+      "correct": true,
+      "expected": [
+        "digital signature",
+        "key encipherment"
+      ],
+      "your_answer": [
+        "digital signature",
+        "key encipherment"
+      ]
+    },
+    "primary_domain": {
+      "correct": true,
+      "expected": "api233.pl",
+      "your_answer": "api233.pl"
+    },
+    "san_domains": {
+      "correct": true,
+      "expected": [
+        "secure796.net",
+        "secure929.io",
+        "secure672.pl",
+        "api233.pl"
+      ],
+      "your_answer": [
+        "secure796.net",
+        "secure929.io",
+        "secure672.pl",
+        "api233.pl"
+      ]
+    }
+  },
+  "score": "6/6"
+}
+
+
+
+
+
+
 
 
 
