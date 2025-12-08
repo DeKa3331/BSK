@@ -211,6 +211,106 @@ usImGMUeQ/2dSeDMRpyF/Cm0+XwoC6Msx1y/b+dG3QSKusuALTeIDe4G1g==
 -----END PUBLIC KEY-----
 
 
+6.2
+pobieranie z przekierowaniem do pliku:
+
+openssl s_client -connect github.com:443 -showcerts </dev/null > gh.txt 2>/dev/null > github.txt
+
+6.3
+sudo docker run -p 8443:443 --name tls3 docker.io/mazurkatarzyna/tls-ex3:latest
+
+echo | openssl s_client -servername 127.0.0.1 -connect 127.0.0.1:8443 2>/dev/null | openssl x509 -out strona.crt
+deka@SKH-KUBUNTU:~$ cat strona.crt
+-----BEGIN CERTIFICATE-----
+MIIDpzCCAo+gAwIBAgIUH9b0yv1zMuQeN+fqOhJyqjZzJ5gwDQYJKoZIhvcNAQEL
+BQAwYzELMAkGA1UEBhMCUEwxEjAQBgNVBAgMCUx1YmVsc2tpZTEPMA0GA1UEBwwG
+THVibGluMQ0wCwYDVQQKDARVTUNTMQwwCgYDVQQLDANNRkkxEjAQBgNVBAMMCWxv
+Y2FsaG9zdDAeFw0yNTEyMDQxNzI5MThaFw0yNjEyMDQxNzI5MThaMGMxCzAJBgNV
+BAYTAlBMMRIwEAYDVQQIDAlMdWJlbHNraWUxDzANBgNVBAcMBkx1YmxpbjENMAsG
+A1UECgwEVU1DUzEMMAoGA1UECwwDTUZJMRIwEAYDVQQDDAlsb2NhbGhvc3QwggEi
+MA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDXWuFKJP3hfruNdPk+D0grIa9j
+I3PVnGi/IE/IRJSFpQg9K+4juPRkBfqWDBlNaAC+40IVYfX8vvpGiml38DAjPgTW
+akEegSR7Ct21TCJ3p6DWgqNu2MWnfClbA/PP6XAfCGRfgrQ5tT68vK5GOfuzqjY7
+doQD0Tuzypv7MTlmINruRwSSaW7Hn4uciK5WAroAdiBJyVS/DprhALpvwbQK4reB
+2Kuw196sUPOwWJfeOUFxpmnsuMgMJRT/uaLk20TGQnNZ7mS7hkVV6qnVpep+7TrQ
+bkYYl7mxD/X3XuiOKOyNmCogLyiqH/yuIRTKmsIz8K7wp48weXkKPJ1XMv55AgMB
+AAGjUzBRMB0GA1UdDgQWBBQreQ4JY/vGWi+Ebzvxa2pdHq7JxjAfBgNVHSMEGDAW
+gBQreQ4JY/vGWi+Ebzvxa2pdHq7JxjAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3
+DQEBCwUAA4IBAQDPKK2Dz9aMMJWnjUdvhI7QW0W/pHsqvWe2ge0i5cx4MF+v7/0Z
+u7M7yPS2kBeLBLbJzu4nbMyguewubnhdL4zGz/ZZqbavMBQkmhZVqEQEjzXoCqSt
+p9AOcyQF+ksh4ax8ebFQmc3gpPPTuA58bMcdLLInSprWFZ5DdbxW02AtpNsBD8io
+2BF8FEAKUmbvZKPYjCiNHdkRdmOkX8KD8H4ZB4RhPOfymrVrNCzgDle0NTRdBtWs
+2XNhaU37IIQVxMcRknRXT0UEyybb3XyU0N1yaRLXB75oKj41hI8XDSlZx7PDzlhE
+xh5yZKcXHNxRXMOdKbxZpYELu/BKCDC3/Q3L
+-----END CERTIFICATE-----
+
+ladnie:
+openssl x509 -in strona.crt -noout -text
+
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            1f:d6:f4:ca:fd:73:32:e4:1e:37:e7:ea:3a:12:72:aa:36:73:27:98
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = PL, ST = Lubelskie, L = Lublin, O = UMCS, OU = MFI, CN = localhost
+        Validity
+            Not Before: Dec  4 17:29:18 2025 GMT
+            Not After : Dec  4 17:29:18 2026 GMT
+        Subject: C = PL, ST = Lubelskie, L = Lublin, O = UMCS, OU = MFI, CN = localhost
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:d7:5a:e1:4a:24:fd:e1:7e:bb:8d:74:f9:3e:0f:
+                    48:2b:21:af:63:23:73:d5:9c:68:bf:20:4f:c8:44:
+                    94:85:a5:08:3d:2b:ee:23:b8:f4:64:05:fa:96:0c:
+                    19:4d:68:00:be:e3:42:15:61:f5:fc:be:fa:46:8a:
+                    69:77:f0:30:23:3e:04:d6:6a:41:1e:81:24:7b:0a:
+                    dd:b5:4c:22:77:a7:a0:d6:82:a3:6e:d8:c5:a7:7c:
+                    29:5b:03:f3:cf:e9:70:1f:08:64:5f:82:b4:39:b5:
+                    3e:bc:bc:ae:46:39:fb:b3:aa:36:3b:76:84:03:d1:
+                    3b:b3:ca:9b:fb:31:39:66:20:da:ee:47:04:92:69:
+                    6e:c7:9f:8b:9c:88:ae:56:02:ba:00:76:20:49:c9:
+                    54:bf:0e:9a:e1:00:ba:6f:c1:b4:0a:e2:b7:81:d8:
+                    ab:b0:d7:de:ac:50:f3:b0:58:97:de:39:41:71:a6:
+                    69:ec:b8:c8:0c:25:14:ff:b9:a2:e4:db:44:c6:42:
+                    73:59:ee:64:bb:86:45:55:ea:a9:d5:a5:ea:7e:ed:
+                    3a:d0:6e:46:18:97:b9:b1:0f:f5:f7:5e:e8:8e:28:
+                    ec:8d:98:2a:20:2f:28:aa:1f:fc:ae:21:14:ca:9a:
+                    c2:33:f0:ae:f0:a7:8f:30:79:79:0a:3c:9d:57:32:
+                    fe:79
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                2B:79:0E:09:63:FB:C6:5A:2F:84:6F:3B:F1:6B:6A:5D:1E:AE:C9:C6
+            X509v3 Authority Key Identifier: 
+                2B:79:0E:09:63:FB:C6:5A:2F:84:6F:3B:F1:6B:6A:5D:1E:AE:C9:C6
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        cf:28:ad:83:cf:d6:8c:30:95:a7:8d:47:6f:84:8e:d0:5b:45:
+        bf:a4:7b:2a:bd:67:b6:81:ed:22:e5:cc:78:30:5f:af:ef:fd:
+        19:bb:b3:3b:c8:f4:b6:90:17:8b:04:b6:c9:ce:ee:27:6c:cc:
+        a0:b9:ec:2e:6e:78:5d:2f:8c:c6:cf:f6:59:a9:b6:af:30:14:
+        24:9a:16:55:a8:44:04:8f:35:e8:0a:a4:ad:a7:d0:0e:73:24:
+        05:fa:4b:21:e1:ac:7c:79:b1:50:99:cd:e0:a4:f3:d3:b8:0e:
+        7c:6c:c7:1d:2c:b2:27:4a:9a:d6:15:9e:43:75:bc:56:d3:60:
+        2d:a4:db:01:0f:c8:a8:d8:11:7c:14:40:0a:52:66:ef:64:a3:
+        d8:8c:28:8d:1d:d9:11:76:63:a4:5f:c2:83:f0:7e:19:07:84:
+        61:3c:e7:f2:9a:b5:6b:34:2c:e0:0e:57:b4:35:34:5d:06:d5:
+        ac:d9:73:61:69:4d:fb:20:84:15:c4:c7:11:92:74:57:4f:45:
+        04:cb:26:db:dd:7c:94:d0:dd:72:69:12:d7:07:be:68:2a:3e:
+        35:84:8f:17:0d:29:59:c7:b3:c3:ce:58:44:c6:1e:72:64:a7:
+        17:1c:dc:51:5c:c3:9d:29:bc:59:a5:81:0b:bb:f0:4a:08:30:
+        b7:fd:0d:cb
+
+
+3.skipuje bo komendy mamy wyzej w wiekszosci
+
+
+zad6.4
 
 
 
