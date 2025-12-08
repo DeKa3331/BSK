@@ -462,6 +462,15 @@ WYNIK 100%:
 
 
 
+zad6.6
+zamiast bawic sie wiresharkiem to pobralem z kampusa ex66.zip
+
+unzip ex66.zip
+
+tym sie bede musial pobawic bo ogarnialem wiresharka na linuxe
+
+
+
 
 
 
